@@ -1,0 +1,9 @@
+development.driver=com.mysql.jdbc.Driver
+development.username=<USERNAME>
+development.password=<PASSWORD>
+development.url=jdbc:mysql://localhost:3306/trivia_dev
+
+test.driver=com.mysql.jdbc.Driver
+test.username=<USERNAME>
+test.password=<PASSWORD>
+test.url=jdbc:mysql://localhost/trivia_test
