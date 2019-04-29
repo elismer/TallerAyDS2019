@@ -43,4 +43,39 @@ CREATE TABLE comments (
   updated_at DATETIME,
   CONSTRAINT fkuser FOREIGN KEY (id_user)
 	REFERENCES users,
-  );
+);
+
+CREATE TABLE IF NOT EXISTS answers(
+  id int(11) auto_increment PRIMARY KEY,
+  id_option int NOT NULL,
+  id_game int NOT NULL,
+  KEY FK_answers_1 (id_option),
+  KEY FK_answers_2 (id_game),
+  CONSTRAINT FK_answers_1 foreign key(id_option) REFERENCES options (id),
+  CONSTRAINT FK_answers_2 foreign key(id_game) REFERENCES games (id),
+  created_at TIMESTAMP NULL,
+  updated_at TIMESTAMP NULL
+)ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS options(
+  id int(11) auto_increment PRIMARY KEY,
+  descrip VARCHAR(50),
+  tipo ENUM('CORRECT','INCORRECT','UNKNOW') default 'UNKNOW',
+  id_question int NOT NULL,
+  KEY FK_options_1 (id_question),
+  constraint FK_options_1 foreign key(id_question) references questions (id), 
+  created_at TIMESTAMP NULL,
+  updated_at TIMESTAMP NULL
+)ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS games(
+  id int(11) auto_increment PRIMARY KEY,
+  created_at TIMESTAMP NULL,
+  updated_at TIMESTAMP NULL
+)ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS stasts(
+  id int(11) auto_increment PRIMARY KEY,
+  created_at TIMESTAMP NULL,
+  updated_at TIMESTAMP NULL
+)ENGINE=InnoDB;
