@@ -34,13 +34,16 @@ public class App
         Map<String, Object> bodyParams = new Gson().fromJson(req.body(), Map.class);
 
         User user = new User();
-        user.set("username", bodyParams.get("username"));
-        user.set("password", bodyParams.get("password"));
+        user.set("dni", bodyParams.get("dni"));
+        user.set("name_user", bodyParams.get("name_user"));
+        user.set("lastName",bodyParams.get("lastName"));
         user.saveIt();
 
         res.type("application/json");
 
         return user.toJson(true);
+        
       });
+     
     }
 }
