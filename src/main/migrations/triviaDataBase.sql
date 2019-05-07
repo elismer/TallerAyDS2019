@@ -1,6 +1,6 @@
 
 CREATE TABLE if not exists users (
-  id_user  int(11) NOT NULL auto_increment PRIMARY KEY,
+  id  int(11) NOT NULL auto_increment PRIMARY KEY,
   dni int(8) NOT NULL,
   name_user VARCHAR(56) NOT NULL,
   lastName VARCHAR(56),
@@ -11,14 +11,14 @@ CREATE TABLE if not exists users (
   
 
 CREATE TABLE if not exists categories (
-  id_category int(11) NOT NULL auto_increment PRIMARY KEY,
+  id int(11) NOT NULL auto_increment PRIMARY KEY,
   numCategory ENUM ('1','2','3','4','5','6'),
   created_at DATETIME,
   updated_at DATETIME
   );
 
 CREATE TABLE if not exists levels (
-  id_level int(11) NOT NULL auto_increment PRIMARY KEY,
+  id int(11) NOT NULL auto_increment PRIMARY KEY,
   number_level ENUM ('1','2','3','4','5','6','7','8','9','10'),
   id_cat int(11) NOT NULL,
   created_at DATETIME,
@@ -29,7 +29,7 @@ CREATE TABLE if not exists levels (
   
 
 CREATE TABLE if not exists questions(
-  id_question int(11) NOT NULL auto_increment PRIMARY KEY,
+  id int(11) NOT NULL auto_increment PRIMARY KEY,
   description VARCHAR(140),
   id_cate int(11) NOT NULL,
   created_at DATETIME,
@@ -40,7 +40,7 @@ CREATE TABLE if not exists questions(
   
 
 CREATE TABLE if not exists comments (
-  id_comment  int(11) NOT NULL auto_increment PRIMARY KEY,
+  id  int(11) NOT NULL auto_increment PRIMARY KEY,
   descriptions VARCHAR(140),
   id_user int(11),
   created_at DATETIME,
@@ -52,11 +52,11 @@ CREATE TABLE if not exists comments (
 CREATE TABLE IF NOT EXISTS options(
   id int(11) auto_increment PRIMARY KEY,
   descrip VARCHAR(50),
-  tipo ENUM('CORRECT','INCORRECT','UNKNOW') default 'UNKNOW',
+  tipo ENUM('CORRECT','INCORRECT') default 'INCORRECT',
   id_question int NOT NULL,
   KEY FK_options_1 (id_question),
   CONSTRAINT FK_options_1 FOREIGN KEY (id_question) 
-	REFERENCES questions (id_question), 
+	REFERENCES questions (id), 
   created_at DATETIME,
   updated_at DATETIME
 )ENGINE=InnoDB;
@@ -73,8 +73,6 @@ CREATE TABLE IF NOT EXISTS answers(
   id int(11) auto_increment PRIMARY KEY,
   id_option int NOT NULL,
   id_game int NOT NULL,
-  KEY FK_answers_1 (id_option),
-  KEY FK_answers_2 (id_game),
   CONSTRAINT FK_answers_1 FOREIGN KEY (id_option) REFERENCES options (id),
   CONSTRAINT FK_answers_2 FOREIGN KEY (id_game) REFERENCES games (id),
   created_at DATETIME,
