@@ -60,10 +60,14 @@ public class UserIntegrationTest {
 
     @Test
     public void canCreateUser() {
-      String username = "Alan";
+      String name_user = "Alan";
       String password = "Turing";
+      String dni= "36278456";
+      String last_name ="hola";
       Map<String, String> parameters = new HashMap<>();
-      parameters.put("username", username);
+      parameters.put("name_user", name_user);
+      parameters.put("dni",dni);
+      parameters.put("last_name",last_name);
       parameters.put("password", password);
 
       UrlResponse response = doRequest("POST", "/users", parameters);
@@ -72,7 +76,7 @@ public class UserIntegrationTest {
       assertNotNull(response);
       assertNotNull(response.body);
       assertEquals(200, response.status);
-      assertEquals(jsonResponse.get("username"), username);
+      assertEquals(jsonResponse.get("name_user"), name_user);
     }
 
     private static UrlResponse doRequest(String requestMethod, String path, Map body) {
