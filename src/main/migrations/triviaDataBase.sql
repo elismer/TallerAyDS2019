@@ -41,7 +41,7 @@ CREATE TABLE if not exists questions(
 
 CREATE TABLE if not exists comments (
   id  int(11) NOT NULL auto_increment PRIMARY KEY,
-  descriptions VARCHAR(140),
+  description VARCHAR(140),
   id_user int(11),
   created_at DATETIME,
   updated_at DATETIME,
@@ -51,8 +51,8 @@ CREATE TABLE if not exists comments (
 
 CREATE TABLE IF NOT EXISTS options(
   id int(11) auto_increment PRIMARY KEY,
-  descrip VARCHAR(50),
-  tipo ENUM('CORRECT','INCORRECT') default 'INCORRECT',
+  description VARCHAR(50),
+  type ENUM('CORRECT','INCORRECT') default 'INCORRECT',
   id_question int NOT NULL,
   KEY FK_options_1 (id_question),
   CONSTRAINT FK_options_1 FOREIGN KEY (id_question) 
