@@ -4,6 +4,7 @@ CREATE TABLE if not exists users (
   dni int(8) NOT NULL,
   name_user VARCHAR(56) NOT NULL,
   lastName VARCHAR(56),
+  password VARCHAR(24) NOT NULL,
   UNIQUE (dni),
   created_at DATETIME,
   updated_at DATETIME
@@ -54,7 +55,6 @@ CREATE TABLE IF NOT EXISTS options(
   description VARCHAR(50),
   type ENUM('CORRECT','INCORRECT') default 'INCORRECT',
   id_question int NOT NULL,
-  KEY FK_options_1 (id_question),
   CONSTRAINT FK_options_1 FOREIGN KEY (id_question) 
 	REFERENCES questions (id), 
   created_at DATETIME,
@@ -65,6 +65,9 @@ CREATE TABLE IF NOT EXISTS options(
 
 CREATE TABLE IF NOT EXISTS games(
   id int(11) auto_increment PRIMARY KEY,
+  id_user int,
+  CONSTRAINT FK_user_1 FOREIGN KEY (id_user)
+  	REFERENCES users (id),
   created_at DATETIME,
   updated_at DATETIME
 )ENGINE=InnoDB;

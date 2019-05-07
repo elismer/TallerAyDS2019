@@ -87,6 +87,14 @@ public class App
       post("/comments", (req, res) -> {
       	Map<String, Object> bodyParams = new Gson().fromJson(req.body(), Map.class);
       	
-      	Option
+      	Comment comment = new Comment();
+      	comment.set("description", bodyParams.get("description");
+      	comment.add(user);
+      	comment.saveIt();
+      	
+      	res.type("application/json");
+      	
+      	return comment.toJson(true);
+      	
     }
 }
