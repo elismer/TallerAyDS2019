@@ -24,8 +24,8 @@ CREATE TABLE if not exists levels (
   id_cat int(11) NOT NULL,
   created_at DATETIME,
   updated_at DATETIME,
-  CONSTRAINT fkcategory FOREIGN KEY (id_cat)
-	REFERENCES categories (id_category)
+  CONSTRAINT fklevel FOREIGN KEY (id_cat)
+	REFERENCES categories (id)
   );
   
 
@@ -35,8 +35,8 @@ CREATE TABLE if not exists questions(
   id_cate int(11) NOT NULL,
   created_at DATETIME,
   updated_at DATETIME,
-  CONSTRAINT fkquestions FOREIGN KEY (id_cate)
-	REFERENCES categories (id_category)
+  CONSTRAINT fkquestion FOREIGN KEY (id_cate)
+	REFERENCES categories (id)
   );
   
 
@@ -46,8 +46,8 @@ CREATE TABLE if not exists comments (
   id_user int(11),
   created_at DATETIME,
   updated_at DATETIME,
-  CONSTRAINT fkuser FOREIGN KEY (id_user)
-	REFERENCES users (id_user)
+  CONSTRAINT fkcomment FOREIGN KEY (id_user)
+	REFERENCES users (id)
 );
 
 CREATE TABLE IF NOT EXISTS options(
@@ -55,7 +55,7 @@ CREATE TABLE IF NOT EXISTS options(
   description VARCHAR(50),
   type ENUM('CORRECT','INCORRECT') default 'INCORRECT',
   id_question int NOT NULL,
-  CONSTRAINT FK_options_1 FOREIGN KEY (id_question) 
+  CONSTRAINT fkoptions FOREIGN KEY (id_question) 
 	REFERENCES questions (id), 
   created_at DATETIME,
   updated_at DATETIME
@@ -66,7 +66,7 @@ CREATE TABLE IF NOT EXISTS options(
 CREATE TABLE IF NOT EXISTS games(
   id int(11) auto_increment PRIMARY KEY,
   id_user int,
-  CONSTRAINT FK_user_1 FOREIGN KEY (id_user)
+  CONSTRAINT fkgame FOREIGN KEY (id_user) 
   	REFERENCES users (id),
   created_at DATETIME,
   updated_at DATETIME
@@ -76,14 +76,19 @@ CREATE TABLE IF NOT EXISTS answers(
   id int(11) auto_increment PRIMARY KEY,
   id_option int NOT NULL,
   id_game int NOT NULL,
-  CONSTRAINT FK_answers_1 FOREIGN KEY (id_option) REFERENCES options (id),
-  CONSTRAINT FK_answers_2 FOREIGN KEY (id_game) REFERENCES games (id),
+  CONSTRAINT fkanswer_1 FOREIGN KEY (id_option) 
+  	REFERENCES options (id),
+  CONSTRAINT fkanswer_2 FOREIGN KEY (id_game) 
+  	REFERENCES games (id),
   created_at DATETIME,
   updated_at DATETIME
 )ENGINE=InnoDB;
 
-CREATE TABLE IF NOT EXISTS stasts(
+CREATE TABLE IF NOT EXISTS stats(
   id int(11) auto_increment PRIMARY KEY,
+  id_user int,
+  CONSTRAINT fkstat FOREIGN KEY (id_user) 
+  	REFERENCES users (id),
   created_at DATETIME,
   updated_at DATETIME
 )ENGINE=InnoDB;

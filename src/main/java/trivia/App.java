@@ -45,6 +45,14 @@ public class App
         
       });
       
+      get("/users", (req, res) -> { //retorna todos los usuarios
+      	List<User> user = User.findAll();
+      	for (User u: user)
+      		System.out.println("Su username es: " + u.get("name_user") + ", su dni es: " + u.get("dni"));
+      	return user;
+      });
+      
+      
       post("/categories", (req, res) -> {
       	Map<String, Object> bodyParams = new Gson().fromJson(req.body(), Map.class);
       	
@@ -95,6 +103,44 @@ public class App
       	res.type("application/json");
       	
       	return comment.toJson(true);
+      });
+      
+      post("/levels", (req, res) -> {
+      	Map<String, Object> bodyParams = new Gson().fromJson(req.body(), Map.class);
       	
+      	Level level = new Level();
+      	level.set("number_level"), bodyParams.get("number_level");
+      	level.add(category);
+      	level.saveIt();
+      	
+      	res.type("application/json");
+      	
+      	return level.toJson(true);
+      });
+      
+       post("/stats", (req, res) -> {
+      	Map<String, Object> bodyParams = new Gson().fromJson(req.body(), Map.class);
+      	
+      	Stat stat = new Stat();
+      	stat.add(user);
+      	stat.saveIt();
+      	
+      	res.type("application/json");
+      	
+      	return stat.toJson(true);
+      });
+      
+       post("/answers", (req, res) -> {
+      	Map<String, Object> bodyParams = new Gson().fromJson(req.body(), Map.class);
+      	
+      	Answer answer = new Answer();
+      	answer.add(game);
+      	answer.add(option);
+      	answer.saveIt();
+      	
+      	res.type("application/json");
+      	
+      	return answer.toJson(true);
+      });
     }
 }
