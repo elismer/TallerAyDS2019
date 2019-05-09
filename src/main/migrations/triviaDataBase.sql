@@ -5,6 +5,8 @@ CREATE TABLE if not exists users (
   name_user VARCHAR(56) NOT NULL,
   last_name VARCHAR(56) NOT NULL,
   password VARCHAR(24) NOT NULL,
+  admin BOOLEAN default FALSE,
+  year ENUM ('1','2','3','4','5','6','graduated','noStudent') default NULL,
   UNIQUE (dni),
   created_at DATETIME,
   updated_at DATETIME
