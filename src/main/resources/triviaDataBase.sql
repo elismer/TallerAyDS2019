@@ -26,7 +26,6 @@ CREATE TABLE if not exists levels (
   categories_id int(11) NOT NULL,
   created_at DATETIME,
   updated_at DATETIME,
-)
   );
   
 
@@ -36,7 +35,6 @@ CREATE TABLE if not exists questions(
   categories_id int(11) NOT NULL,
   created_at DATETIME,
   updated_at DATETIME,
-)
   );
   
 
