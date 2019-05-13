@@ -40,11 +40,14 @@ public class App
       get("/hello/:name", (req, res) -> {
         return "hello" + req.params(":name");
       });
+      
+      System.out.println("hola mundo");
 
       post("/users", (req, res) -> {
         Map<String, Object> bodyParams = new Gson().fromJson(req.body(), Map.class);
 
         User user = new User();
+        //user.CreateUser("Juan", "Pablo", 40928243, "hola");
         user.set("dni", bodyParams.get("dni"));
         user.set("name_user", bodyParams.get("name_user"));
         user.set("last_name",bodyParams.get("last_name"));
@@ -79,10 +82,25 @@ public class App
       
       post("/questions", (req, res) -> {
       	Map<String, Object> bodyParams = new Gson().fromJson(req.body(), Map.class);
-      	
+      	Category category = new Category();
+      	category.set("num_category", bodyParams.get("numCategory"));
       	Question question = new Question();
       	question.set("description", bodyParams.get("description"));
-      	//question.add(category);
+   
+      	//Option option = new Option();
+      	//option.set("description", "description");
+      	//option.set("type", "type");
+      	//option.saveIt();
+      	//option.add(question);
+      	/*for (int i=0 ; i < 4 ; i++){
+      		Option option = new Option();
+      		option.set("description", "description");
+      		option.set("type", "type");
+      		option.saveIt();
+      		option.add(question);
+      	}*/
+      	category.saveIt();
+      	question.add(category);
       	question.saveIt();
       	
       	res.type("application/json");
@@ -154,5 +172,6 @@ public class App
       	
       	return answer.toJson(true);
       });
+      
     }
 }

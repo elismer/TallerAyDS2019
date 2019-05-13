@@ -1,3 +1,4 @@
+CREATE DATABASE IF NOT EXISTS trivia_dev;
 
 CREATE TABLE if not exists users (
   id  int(11) NOT NULL auto_increment PRIMARY KEY,
@@ -15,7 +16,7 @@ CREATE TABLE if not exists users (
 
 CREATE TABLE if not exists categories (
   id int(11) NOT NULL auto_increment PRIMARY KEY,
-  numCategory ENUM ('1','2','3','4','5','6') NOT NULL,
+  num_category ENUM ('1','2','3','4','5','6') NOT NULL,
   created_at DATETIME,
   updated_at DATETIME
   );
@@ -25,7 +26,7 @@ CREATE TABLE if not exists levels (
   number_level ENUM ('1','2','3','4','5','6','7','8','9','10') NOT NULL,
   category_id int(11) NOT NULL,
   created_at DATETIME,
-  updated_at DATETIME,
+  updated_at DATETIME
   );
   
 
@@ -33,8 +34,10 @@ CREATE TABLE if not exists questions(
   id int(11) NOT NULL auto_increment PRIMARY KEY,
   description VARCHAR(140) NOT NULL,
   category_id int(11) NOT NULL,
+  active BOOLEAN,
+  answered BOOLEAN,
   created_at DATETIME,
-  updated_at DATETIME,
+  updated_at DATETIME
   );
   
 
@@ -43,7 +46,8 @@ CREATE TABLE if not exists comments (
   description VARCHAR(140) NOT NULL,
   user_id int(11) NOT NULL,
   created_at DATETIME,
-  updated_at DATETIME,
+  updated_at DATETIME
+  );
 
 CREATE TABLE IF NOT EXISTS options(
   id int(11) NOT NULL auto_increment PRIMARY KEY,
