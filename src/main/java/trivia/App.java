@@ -7,6 +7,7 @@ import static spark.Spark.post;
 import static spark.Spark.before;
 import static spark.Spark.after;
 
+import java.util.ArrayList;
 import org.javalite.activejdbc.LazyList;
 
 import org.javalite.activejdbc.Base;
@@ -24,6 +25,15 @@ import trivia.Comment;
 
 import com.google.gson.Gson;
 import java.util.Map;
+
+class QuestionParam
+{
+  String description;
+  ArrayList<Option> options;
+  Boolean active;
+  Boolean answered;
+  String category_id;
+}
 
 public class App
 {
@@ -47,7 +57,6 @@ public class App
         Map<String, Object> bodyParams = new Gson().fromJson(req.body(), Map.class);
 
         User user = new User();
-        //user.CreateUser("Juan", "Pablo", 40928243, "hola");
         user.set("dni", bodyParams.get("dni"));
         user.set("name_user", bodyParams.get("name_user"));
         user.set("last_name",bodyParams.get("last_name"));
@@ -68,59 +77,27 @@ public class App
       });
       
       
-      post("/categories", (req, res) -> {
-      	Map<String, Object> bodyParams = new Gson().fromJson(req.body(), Map.class);
-      	
-      	Category category = new Category();
-      	category.set("numCategory", bodyParams.get("numCategory"));
-      	category.saveIt();
-      	
-      	res.type("application/json");
-      	
-      	return category.toJson(true);	
-      });
       
       post("/questions", (req, res) -> {
-      	Map<String, Object> bodyParams = new Gson().fromJson(req.body(), Map.class);
-      	Category category = new Category();
-      	category.set("num_category", bodyParams.get("numCategory"));
+      	QuestionParam bodyParams = new Gson().fromJson(req.body(), QuestionParam.class);
+      	//Map<String, Object> bodyParams = new Gson().fromJson(req.body(), Map.class);
+      	
       	Question question = new Question();
-      	question.set("description", bodyParams.get("description"));
-   
-      	//Option option = new Option();
-      	//option.set("description", "description");
-      	//option.set("type", "type");
-      	//option.saveIt();
-      	//option.add(question);
-      	/*for (int i=0 ; i < 4 ; i++){
-      		Option option = new Option();
-      		option.set("description", "description");
-      		option.set("type", "type");
-      		option.saveIt();
-      		option.add(question);
-      	}*/
-      	category.saveIt();
-      	question.add(category);
+      	question.set("description", bodyParams.description);
+      	question.set("category_id", bodyParams.category_id);
+      	
       	question.saveIt();
       	
-      	res.type("application/json");
+      	for(Option item: bodyParams.options) {
+          		Option option = new Option();
+          		option.set("description", item.description);
+          		option.set("type", item.type);
+          		question.add(option);
+        	}
       	
-      	return question.toJson(true);	
+      	return question;	
       });
      
-      post("/options", (req, res) -> {
-      	Map<String, Object> bodyParams = new Gson().fromJson(req.body(), Map.class);
-		
-		Option option = new Option();
-		option.set("description", bodyParams.get("description"));
-		option.set("type", bodyParams.get("type"));
-		//option.add(question);
-		option.saveIt();
-		
-		res.type("application/json");
-      	
-      	return option.toJson(true);
-      });
       
       post("/comments", (req, res) -> {
       	Map<String, Object> bodyParams = new Gson().fromJson(req.body(), Map.class);
@@ -135,18 +112,6 @@ public class App
       	return comment.toJson(true);
       });
       
-      post("/levels", (req, res) -> {
-      	Map<String, Object> bodyParams = new Gson().fromJson(req.body(), Map.class);
-      	
-      	Level level = new Level();
-      	//level.set("number_level"), bodyParams.get("number_level");
-      	//level.add(category);
-      	level.saveIt();
-      	
-      	res.type("application/json");
-      	
-      	return level.toJson(true);
-      });
       
        post("/stats", (req, res) -> {
       	Map<String, Object> bodyParams = new Gson().fromJson(req.body(), Map.class);
