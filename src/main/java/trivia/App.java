@@ -63,6 +63,9 @@ public class App
         user.set("last_name",bodyParams.get("last_name"));
         user.set("password",bodyParams.get("password"));
         user.saveIt();
+        
+        Game game = new Game();
+        user.add(game);
 
         res.type("application/json");
 
@@ -124,13 +127,13 @@ public class App
       	return question;	
       });
      
-      get("/questions", (req, res) -> { //retorna todas las preguntas
+      get("/questions/options", (req, res) -> { //retorna todas las preguntas con sus opciones
       	LazyList<Question> question = Question.findAll();
-      	for (Question q: question)
+      	for (Question q: question){
       		System.out.println("Descripcion de la pregunta: " + q.get("description"));
       		LazyList<Option> option = q.getAll(Option.class);
       		for (Option o: option)
-      			System.out.println("Descripcion de la opcion: " + o.get("description") + " tipo de la opcion: " + o.get("type"));
+      			System.out.println("Descripcion de la opcion: " + o.get("description") + " tipo de la opcion: " + o.get("type"));}
       	return question;
       });
       
