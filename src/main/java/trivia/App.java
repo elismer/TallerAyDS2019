@@ -1,6 +1,6 @@
 package trivia;
 
-
+import org.javalite.activejdbc.Model;
 import static spark.Spark.get;
 import static spark.Spark.post;
 
@@ -15,7 +15,7 @@ import org.javalite.activejdbc.DB;
 
 import trivia.User;
 import trivia.Answer;
-import trivia.Question;
+import trivia.QuestionParam;
 import trivia.Option;
 import trivia.Game;
 import trivia.Level;
@@ -25,14 +25,15 @@ import trivia.Comment;
 
 import com.google.gson.Gson;
 import java.util.Map;
+import java.util.List;
 
-class QuestionParam
-{
-  String description;
-  ArrayList<Option> options;
-  Boolean active;
-  Boolean answered;
-  String category_id;
+
+class QuestionParam {
+	String description;
+	ArrayList<Option> options;
+	String category_id;
+	Boolean active;
+	Boolean answered;
 }
 
 public class App
@@ -47,11 +48,11 @@ public class App
         Base.close();
       });
 
-      get("/hello/:name", (req, res) -> {
+      /*get("/hello/:name", (req, res) -> {
         return "hello" + req.params(":name");
       });
       
-      System.out.println("hola mundo");
+      System.out.println("hola mundo");*/
 
       post("/users", (req, res) -> {
         Map<String, Object> bodyParams = new Gson().fromJson(req.body(), Map.class);
@@ -81,6 +82,31 @@ public class App
       post("/questions", (req, res) -> {
       	QuestionParam bodyParams = new Gson().fromJson(req.body(), QuestionParam.class);
       	//Map<String, Object> bodyParams = new Gson().fromJson(req.body(), Map.class);
+      	//ArrayList<Option> os = new Gson().fromJson(req.body(), ArrayList.class);
+      	
+      	
+      	/*System.out.println(" Start -------------------- ");
+      	System.out.println(bodyParams);
+      	System.out.println(req.body());
+      	System.out.println( req.params("options"));
+  
+      	System.out.println(req.body().getClass().getName());
+  
+      	System.out.println("bodyParams.description ");
+      	System.out.println(bodyParams.description);
+      
+      	System.out.println("accediendo a options");
+      	System.out.println(bodyParams.options);
+		System.out.println(bodyParams.getOptions());
+            System.out.println(bodyParams.get("options"));
+      	
+      	System.out.println(question.get("options"));
+      	
+      	Object options = question.get("options");
+      	
+      	System.out.println(options);
+      	
+      	System.out.println(" End -------------------- "); */
       	
       	Question question = new Question();
       	question.set("description", bodyParams.description);
@@ -98,6 +124,15 @@ public class App
       	return question;	
       });
      
+      get("/questions", (req, res) -> { //retorna todas las preguntas
+      	LazyList<Question> question = Question.findAll();
+      	for (Question q: question)
+      		System.out.println("Descripcion de la pregunta: " + q.get("description"));
+      		LazyList<Option> option = q.getAll(Option.class);
+      		for (Option o: option)
+      			System.out.println("Descripcion de la opcion: " + o.get("description") + " tipo de la opcion: " + o.get("type"));
+      	return question;
+      });
       
       post("/comments", (req, res) -> {
       	Map<String, Object> bodyParams = new Gson().fromJson(req.body(), Map.class);
