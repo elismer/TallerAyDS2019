@@ -2,6 +2,7 @@ CREATE DATABASE IF NOT EXISTS trivia_dev;
 
 CREATE TABLE if not exists users (
   id  int(11) NOT NULL auto_increment PRIMARY KEY,
+  nick_name VARCHAR (56) NOT NULL,
   dni int(8) NOT NULL,
   name_user VARCHAR(56) NOT NULL,
   last_name VARCHAR(56) NOT NULL,
@@ -62,6 +63,7 @@ CREATE TABLE IF NOT EXISTS options(
 
 CREATE TABLE IF NOT EXISTS games(
   id int(11) NOT NULL auto_increment PRIMARY KEY,
+  playing BOOLEAN default FALSE,
   user_id int NOT NULL,
   created_at DATETIME,
   updated_at DATETIME

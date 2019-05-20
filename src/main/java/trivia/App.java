@@ -36,6 +36,11 @@ class QuestionParam {
 	Boolean answered;
 }
 
+class UserParam {
+	String nickName;
+	String pasword;
+}
+
 public class App
 {
     public static void main( String[] args )
@@ -58,6 +63,7 @@ public class App
         Map<String, Object> bodyParams = new Gson().fromJson(req.body(), Map.class);
 
         User user = new User();
+        user.set("nick_name", bodyParam.get("nick_name");
         user.set("dni", bodyParams.get("dni"));
         user.set("name_user", bodyParams.get("name_user"));
         user.set("last_name",bodyParams.get("last_name"));
@@ -80,6 +86,23 @@ public class App
       	return user;
       });
       
+      get("/game", (req, res) -> {
+      	UserParam bodyParams = new Gson().fromJson(req.body(), UserParam.class);
+      	User user = new User();
+      	user = User.where("nick_name = ?", bodyParams.nickName);
+      	if (user.get("password").equals(bodyParams.pasword)){
+      		if(user.getAll(Game.class)==null)
+      		LazyList <Question> questions = Question.where("category_id = ?", 1);
+      		Question question = questions.get(0);
+      		System.out.println("Descripcion de la pregunta: " + question.get("description"));
+      		LazyList<Option> options = question.getAll(Option.class);
+      		for (Option o: options)
+      			System.out.println(o.get("description"));
+      		Answer answer = new Answer();
+      		answer.set("option_id",options.get(3).get("id");
+      	}else System.out.println("Clave mal ingresada");
+      	
+      });
       
       
       post("/questions", (req, res) -> {
