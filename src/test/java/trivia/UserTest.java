@@ -53,12 +53,12 @@ public class UserTest {
     assertEquals("user last name can't be blank", u.isValid(), false);
   }
   
-  @Test
+  /*@Test
   public void validateNotEqualDni() {
   	User u= new User();
   	assertEquals("this dni is already loaded", u.checkDni(), true); /*checkDni sera un metodo que se fije si un dni ingresado ya se encuentra en la base de datos*/
-  }
   
-  @Test
+  
+ 
   
 }

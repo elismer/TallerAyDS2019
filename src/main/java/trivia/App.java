@@ -3,9 +3,10 @@ package trivia;
 import org.javalite.activejdbc.Model;
 import static spark.Spark.get;
 import static spark.Spark.post;
-
+import static spark.Spark.halt;
 import static spark.Spark.before;
 import static spark.Spark.after;
+import static spark.Spark.options;
 
 import java.util.ArrayList;
 import org.javalite.activejdbc.LazyList;
@@ -14,7 +15,7 @@ import org.javalite.activejdbc.Base;
 import org.javalite.activejdbc.DB;
 
 import trivia.User;
-import trivia.Answer;
+import trivia.GamesOptions;
 import trivia.QuestionParam;
 import trivia.Option;
 import trivia.Game;
@@ -22,6 +23,7 @@ import trivia.Level;
 import trivia.Stat;
 import trivia.Category;
 import trivia.Comment;
+import trivia.BasicAuth;
 
 import com.google.gson.Gson;
 import java.util.Map;
@@ -41,18 +43,50 @@ class UserParam {
 	String pasword;
 }
 
-public class App
-{
-    public static void main( String[] args )
-    {
-      before((request, response) -> {
+public class App{
+
+static LazyList <Option> options;
+
+ static User currentUser; 
+    public static void main( String[] args ){
+    
+     before((request, response) -> {
         Base.open();
+
+        String headerToken = (String) request.headers("Authorization");
+
+        if (
+          headerToken == null ||
+          headerToken.isEmpty() ||
+          !BasicAuth.authorize(headerToken)
+        ) {
+          halt(401);
+        }
+
+        currentUser = BasicAuth.getUser(headerToken);
       });
 
       after((request, response) -> {
         Base.close();
+        response.header("Access-Control-Allow-Origin", "*");
+        response.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
+        response.header("Access-Control-Allow-Headers",
+          "Content-Type,Authorization,X-Requested-With,Content-Length,Accept,Origin,");
       });
 
+      options("/*", (request, response) -> {
+        return "OK";
+      });
+
+      
+       post("/login", (req, res) -> {
+        res.type("application/json");
+
+        // if there is currentUser is because headers are correct, so we only
+        // return the current user here
+        return currentUser.toJson(true);
+      });
+      
       /*get("/hello/:name", (req, res) -> {
         return "hello" + req.params(":name");
       });
@@ -63,7 +97,7 @@ public class App
         Map<String, Object> bodyParams = new Gson().fromJson(req.body(), Map.class);
 
         User user = new User();
-        user.set("nick_name", bodyParam.get("nick_name");
+        user.set("nick_name", bodyParams.get("nick_name"));
         user.set("dni", bodyParams.get("dni"));
         user.set("name_user", bodyParams.get("name_user"));
         user.set("last_name",bodyParams.get("last_name"));
@@ -87,53 +121,22 @@ public class App
       });
       
       get("/game", (req, res) -> {
-      	UserParam bodyParams = new Gson().fromJson(req.body(), UserParam.class);
-      	User user = new User();
-      	user = User.where("nick_name = ?", bodyParams.nickName);
-      	if (user.get("password").equals(bodyParams.pasword)){
-      		if(user.getAll(Game.class)==null)
-      		LazyList <Question> questions = Question.where("category_id = ?", 1);
-      		Question question = questions.get(0);
-      		System.out.println("Descripcion de la pregunta: " + question.get("description"));
-      		LazyList<Option> options = question.getAll(Option.class);
-      		for (Option o: options)
-      			System.out.println(o.get("description"));
-      		Answer answer = new Answer();
-      		answer.set("option_id",options.get(3).get("id");
-      	}else System.out.println("Clave mal ingresada");
+      	LazyList <Question> questions = Question.where("category_id = ?", 1);
+      	Question question = questions.get(0);
+      	System.out.println("Descripcion de la pregunta: " + question.get("description"));
+      	options = question.getAll(Option.class);
+      	for (Option o: options)
+      		System.out.println(o.get("description"));
+      	//Answer answer = new Answer();
+      	//answer.set("option_id",options.get(3).get("id");
+      	
+      	return options;
       	
       });
       
       
       post("/questions", (req, res) -> {
       	QuestionParam bodyParams = new Gson().fromJson(req.body(), QuestionParam.class);
-      	//Map<String, Object> bodyParams = new Gson().fromJson(req.body(), Map.class);
-      	//ArrayList<Option> os = new Gson().fromJson(req.body(), ArrayList.class);
-      	
-      	
-      	/*System.out.println(" Start -------------------- ");
-      	System.out.println(bodyParams);
-      	System.out.println(req.body());
-      	System.out.println( req.params("options"));
-  
-      	System.out.println(req.body().getClass().getName());
-  
-      	System.out.println("bodyParams.description ");
-      	System.out.println(bodyParams.description);
-      
-      	System.out.println("accediendo a options");
-      	System.out.println(bodyParams.options);
-		System.out.println(bodyParams.getOptions());
-            System.out.println(bodyParams.get("options"));
-      	
-      	System.out.println(question.get("options"));
-      	
-      	Object options = question.get("options");
-      	
-      	System.out.println(options);
-      	
-      	System.out.println(" End -------------------- "); */
-      	
       	Question question = new Question();
       	question.set("description", bodyParams.description);
       	question.set("category_id", bodyParams.category_id);
@@ -185,14 +188,19 @@ public class App
       	
       	return stat.toJson(true);
       });
+
       
        post("/answers", (req, res) -> {
       	Map<String, Object> bodyParams = new Gson().fromJson(req.body(), Map.class);
-      	
-      	Answer answer = new Answer();
-      	//answer.add(game);
-      	//answer.add(option);
-      	answer.saveIt();
+      	int place = Integer.parseInt((String)bodyParams.get("chosen_option"));
+      	GamesOptions answer = new GamesOptions();
+      	LazyList<Game> games= currentUser.getAll(Game.class);
+      	Game game= games.get(0);
+      	Option option = options.get(place - 1);
+      	game.add(option);
+		if (option.get("type").equals("CORRECT")){
+			System.out.println("Tu respuesta es correcta");
+		}else if (option.get("type").equals("INCORRECT")) System.out.println("Te vemos el año que viene");
       	
       	res.type("application/json");
       	

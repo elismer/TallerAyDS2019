@@ -18,6 +18,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Base64;
 
 import org.junit.After;
 import org.junit.Before;
@@ -36,6 +37,8 @@ import com.google.gson.Gson;
 
 public class UserIntegrationTest {
     private static int PORT = 4567;
+    private static String ADMIN_USERNAME = "admin";
+    private static String ADMIN_PASSWORD = "admin";
 
     @AfterClass
     public static void tearDown() {
@@ -56,19 +59,33 @@ public class UserIntegrationTest {
         App.main(null);
 
         Spark.awaitInitialization();
+
+        // Create an admin user to log into system using Basic Auth before run the test
+        Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost:3306/trivia_dev", "root", "root");
+        User u = new User();
+        u.set("name_user", ADMIN_USERNAME);
+        u.set("password", ADMIN_PASSWORD);
+        u.set("dni", "23009456");
+        u.set("nick_name","admin");
+        u.set("last_name","lopes");
+        u.saveIt();
+        Base.close();
     }
 
     @Test
     public void canCreateUser() {
-      String name_user = "Alan";
-      String password = "Turing";
-      String dni= "36278456";
-      String last_name ="hola";
+      String username = "Alan";
+      String nick_name = "ConCas";
+      String last_name = "Turing";
+      String dni = "23456789";
+      String password= "abc";
+      
       Map<String, String> parameters = new HashMap<>();
-      parameters.put("name_user", name_user);
-      parameters.put("dni",dni);
-      parameters.put("last_name",last_name);
+      parameters.put("name_user", username);
       parameters.put("password", password);
+      parameters.put("last_name",last_name);
+      parameters.put("dni",dni);
+      parameters.put("nick_name", nick_name);
 
       UrlResponse response = doRequest("POST", "/users", parameters);
       Map<String, Object> jsonResponse = new Gson().fromJson(response.body, Map.class);
@@ -76,7 +93,7 @@ public class UserIntegrationTest {
       assertNotNull(response);
       assertNotNull(response.body);
       assertEquals(200, response.status);
-      assertEquals(jsonResponse.get("name_user"), name_user);
+      assertEquals(jsonResponse.get("name_user"), username);
     }
 
     private static UrlResponse doRequest(String requestMethod, String path, Map body) {
@@ -97,6 +114,12 @@ public class UserIntegrationTest {
 
       // This is the point where the connection is opened.
       HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+      // Set User to get Authorized request
+      String userCredentials = ADMIN_USERNAME + ":" + ADMIN_PASSWORD;
+      String basicAuth = "Basic " + new String(
+        Base64.getEncoder().encode(userCredentials.getBytes())
+      );
+      connection.setRequestProperty("Authorization", basicAuth);
 
       // set connection output to true (needs to be true since this request
       // is carrying an input (response) body.)

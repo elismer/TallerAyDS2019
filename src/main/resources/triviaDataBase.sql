@@ -69,7 +69,7 @@ CREATE TABLE IF NOT EXISTS games(
   updated_at DATETIME
 )ENGINE=InnoDB;
 
-CREATE TABLE IF NOT EXISTS answers(
+CREATE TABLE IF NOT EXISTS games_options(
   id int(11) NOT NULL auto_increment PRIMARY KEY,
   option_id int NOT NULL,
   game_id int NOT NULL,
