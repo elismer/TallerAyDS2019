@@ -38,16 +38,11 @@ class QuestionParam {
 	Boolean answered;
 }
 
-class UserParam {
-	String nickName;
-	String pasword;
-}
-
 public class App{
 
-static LazyList <Option> options;
+    static LazyList <Option> options;
 
- static User currentUser; 
+    static User currentUser; 
     public static void main( String[] args ){
     
      before((request, response) -> {
@@ -102,6 +97,7 @@ static LazyList <Option> options;
         user.set("name_user", bodyParams.get("name_user"));
         user.set("last_name",bodyParams.get("last_name"));
         user.set("password",bodyParams.get("password"));
+        user.set("year",bodyParams.get("year"));
         user.saveIt();
         
         Game game = new Game();
@@ -127,9 +123,6 @@ static LazyList <Option> options;
       	options = question.getAll(Option.class);
       	for (Option o: options)
       		System.out.println(o.get("description"));
-      	//Answer answer = new Answer();
-      	//answer.set("option_id",options.get(3).get("id");
-      	
       	return options;
       	
       });
@@ -168,21 +161,29 @@ static LazyList <Option> options;
       	
       	Comment comment = new Comment();
       	comment.set("description", bodyParams.get("description"));
-      	//comment.add(user);
-      	comment.saveIt();
-      	
+      	currentUser.add(comment);
+      	      	
       	res.type("application/json");
       	
       	return comment.toJson(true);
       });
+
+      get("/comments", (req, res) -> {
+      	
+      	for(Comment comment : currentUser.getAll(Comment.class)){
+          System.out.println(comment.toString());
+        }
+          	
+      	return comment.toJson(true);
+      });
       
       
-       post("/stats", (req, res) -> {
+      post("/stats", (req, res) -> {
       	Map<String, Object> bodyParams = new Gson().fromJson(req.body(), Map.class);
       	
       	Stat stat = new Stat();
-      	//stat.add(user);
-      	stat.saveIt();
+      	user.add(stat);
+				
       	
       	res.type("application/json");
       	
@@ -198,10 +199,10 @@ static LazyList <Option> options;
       	Game game= games.get(0);
       	Option option = options.get(place - 1);
       	game.add(option);
-		if (option.get("type").equals("CORRECT")){
-			System.out.println("Tu respuesta es correcta");
-		}else if (option.get("type").equals("INCORRECT")) System.out.println("Te vemos el año que viene");
-      	
+				if (option.get("type").equals("CORRECT")){
+					System.out.println("Tu respuesta es correcta");
+				}else if (option.get("type").equals("INCORRECT")) System.out.println("Te vemos el año que viene");
+				
       	res.type("application/json");
       	
       	return answer.toJson(true);

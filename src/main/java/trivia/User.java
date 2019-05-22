@@ -13,13 +13,4 @@ public class User extends Model {
 		validatePresenceOf("password"). message("Por favor, ingrese una clave");
 	}
 	
-	/*public static void CreateUser(String name, String lastName, Integer dni, String password){
-		User u = new User();
-		u.set("name_user", bodyParams.get(name));
-		u.set("last_name", bodyParams.get(lastName));
-		u.set("dni", bodyParams.get(dni));
-		u.set("password", bodyParams.get(password));
-		
-	}*/
-
 }
