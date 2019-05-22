@@ -174,7 +174,7 @@ public class App{
           System.out.println(comment.toString());
         }
           	
-      	return comment.toJson(true);
+      	return currentUser;
       });
       
       
@@ -182,7 +182,7 @@ public class App{
       	Map<String, Object> bodyParams = new Gson().fromJson(req.body(), Map.class);
       	
       	Stat stat = new Stat();
-      	user.add(stat);
+      	currentUser.add(stat);
 				
       	
       	res.type("application/json");
