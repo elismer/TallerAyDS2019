@@ -63,7 +63,7 @@ public class UserIntegrationTest {
         // Create an admin user to log into system using Basic Auth before run the test
         Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost:3306/trivia_dev", "root", "root");
         User u = new User();
-        u.set("name_user", ADMIN_USERNAME);
+        u.set("username", ADMIN_USERNAME);
         u.set("password", ADMIN_PASSWORD);
         u.set("dni", "23009456");
         u.set("nick_name","admin");
@@ -79,9 +79,9 @@ public class UserIntegrationTest {
       String last_name = "Turing";
       String dni = "23456789";
       String password= "abc";
-      
+
       Map<String, String> parameters = new HashMap<>();
-      parameters.put("name_user", username);
+      parameters.put("username", username);
       parameters.put("password", password);
       parameters.put("last_name",last_name);
       parameters.put("dni",dni);
@@ -93,7 +93,7 @@ public class UserIntegrationTest {
       assertNotNull(response);
       assertNotNull(response.body);
       assertEquals(200, response.status);
-      assertEquals(jsonResponse.get("name_user"), username);
+      assertEquals(jsonResponse.get("username"), username);
     }
 
     private static UrlResponse doRequest(String requestMethod, String path, Map body) {

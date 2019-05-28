@@ -38,13 +38,18 @@ class QuestionParam {
 	Boolean answered;
 }
 
+class UserParam {
+	String nickName;
+	String pasword;
+}
+
 public class App{
 
-    static LazyList <Option> options;
+static LazyList <Option> options;
 
-    static User currentUser; 
+ static User currentUser;
     public static void main( String[] args ){
-    
+
      before((request, response) -> {
         Base.open();
 
@@ -73,7 +78,7 @@ public class App{
         return "OK";
       });
 
-      
+
        post("/login", (req, res) -> {
         res.type("application/json");
 
@@ -81,11 +86,11 @@ public class App{
         // return the current user here
         return currentUser.toJson(true);
       });
-      
+
       /*get("/hello/:name", (req, res) -> {
         return "hello" + req.params(":name");
       });
-      
+
       System.out.println("hola mundo");*/
 
       post("/users", (req, res) -> {
@@ -94,28 +99,28 @@ public class App{
         User user = new User();
         user.set("nick_name", bodyParams.get("nick_name"));
         user.set("dni", bodyParams.get("dni"));
-        user.set("name_user", bodyParams.get("name_user"));
+        user.set("username", bodyParams.get("username"));
         user.set("last_name",bodyParams.get("last_name"));
         user.set("password",bodyParams.get("password"));
-        user.set("year",bodyParams.get("year"));
+				user.set("year", bodyParams.get("year"));
         user.saveIt();
-        
+
         Game game = new Game();
         user.add(game);
 
         res.type("application/json");
 
         return user.toJson(true);
-        
+
       });
-      
+
       get("/users", (req, res) -> { //retorna todos los usuarios
       	LazyList<User> user = User.findAll();
       	for (User u: user)
-      		System.out.println("Su username es: " + u.get("name_user") + ", su dni es: " + u.get("dni"));
+      		System.out.println("Su username es: " + u.get("username") + ", su dni es: " + u.get("dni"));
       	return user;
       });
-      
+
       get("/game", (req, res) -> {
       	LazyList <Question> questions = Question.where("category_id = ?", 1);
       	Question question = questions.get(0);
@@ -123,29 +128,30 @@ public class App{
       	options = question.getAll(Option.class);
       	for (Option o: options)
       		System.out.println(o.get("description"));
+
       	return options;
-      	
+
       });
-      
-      
+
+
       post("/questions", (req, res) -> {
       	QuestionParam bodyParams = new Gson().fromJson(req.body(), QuestionParam.class);
       	Question question = new Question();
       	question.set("description", bodyParams.description);
       	question.set("category_id", bodyParams.category_id);
-      	
+
       	question.saveIt();
-      	
+
       	for(Option item: bodyParams.options) {
           		Option option = new Option();
           		option.set("description", item.description);
           		option.set("type", item.type);
           		question.add(option);
         	}
-      	
-      	return question;	
+
+      	return question;
       });
-     
+
       get("/questions/options", (req, res) -> { //retorna todas las preguntas con sus opciones
       	LazyList<Question> question = Question.findAll();
       	for (Question q: question){
@@ -155,42 +161,41 @@ public class App{
       			System.out.println("Descripcion de la opcion: " + o.get("description") + " tipo de la opcion: " + o.get("type"));}
       	return question;
       });
-      
+
       post("/comments", (req, res) -> {
       	Map<String, Object> bodyParams = new Gson().fromJson(req.body(), Map.class);
-      	
+
       	Comment comment = new Comment();
       	comment.set("description", bodyParams.get("description"));
       	currentUser.add(comment);
-      	      	
+
       	res.type("application/json");
-      	
+
       	return comment.toJson(true);
       });
 
-      get("/comments", (req, res) -> {
-      	
-      	for(Comment comment : currentUser.getAll(Comment.class)){
-          System.out.println(comment.toString());
-        }
-          	
-      	return currentUser;
+			get("/comments", (req, res) -> {
+				LazyList<Comment> com = Comment.findAll();
+				for (Comment comment: com){
+					System.out.println(comment);
+				}
+
+			 return com;
       });
-      
-      
-      post("/stats", (req, res) -> {
+
+       post("/stats", (req, res) -> {
       	Map<String, Object> bodyParams = new Gson().fromJson(req.body(), Map.class);
-      	
+
       	Stat stat = new Stat();
-      	currentUser.add(stat);
-				
-      	
+      	//stat.add(user);
+      	stat.saveIt();
+
       	res.type("application/json");
-      	
+
       	return stat.toJson(true);
       });
 
-      
+
        post("/answers", (req, res) -> {
       	Map<String, Object> bodyParams = new Gson().fromJson(req.body(), Map.class);
       	int place = Integer.parseInt((String)bodyParams.get("chosen_option"));
@@ -199,14 +204,14 @@ public class App{
       	Game game= games.get(0);
       	Option option = options.get(place - 1);
       	game.add(option);
-				if (option.get("type").equals("CORRECT")){
-					System.out.println("Tu respuesta es correcta");
-				}else if (option.get("type").equals("INCORRECT")) System.out.println("Te vemos el año que viene");
-				
+		if (option.get("type").equals("CORRECT")){
+			System.out.println("Tu respuesta es correcta");
+		}else if (option.get("type").equals("INCORRECT")) System.out.println("Te vemos el año que viene");
+
       	res.type("application/json");
-      	
+
       	return answer.toJson(true);
       });
-      
+
     }
 }

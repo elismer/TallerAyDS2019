@@ -10,7 +10,7 @@ public class BasicAuth {
     final String[] creds = getCredentials(headerAuth);
 
     return User.findFirst(
-      "name_user = ? AND password = ?",
+      "username = ? AND password = ?",
       creds[0],
       creds[1]
     ) != null;
@@ -19,7 +19,7 @@ public class BasicAuth {
   static User getUser(String headerAuth) {
     final String[] creds = getCredentials(headerAuth);
 
-    return User.findFirst("name_user = ?", creds[0]);
+    return User.findFirst("username = ?", creds[0]);
   }
 
   private static String[] getCredentials(String headerAuth) {

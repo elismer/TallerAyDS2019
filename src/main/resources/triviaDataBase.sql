@@ -4,16 +4,16 @@ CREATE TABLE if not exists users (
   id  int(11) NOT NULL auto_increment PRIMARY KEY,
   nick_name VARCHAR (56) NOT NULL,
   dni int(8) NOT NULL,
-  name_user VARCHAR(56) NOT NULL,
+  username VARCHAR(56) NOT NULL,
   last_name VARCHAR(56) NOT NULL,
   password VARCHAR(24) NOT NULL,
   admin BOOLEAN default FALSE,
   year ENUM ('1','2','3','4','5','6','graduated','noStudent') default NULL,
-  UNIQUE (dni),
+  UNIQUE (dni,nick_name),
   created_at DATETIME,
   updated_at DATETIME
 );
-  
+
 
 CREATE TABLE if not exists categories (
   id int(11) NOT NULL auto_increment PRIMARY KEY,
@@ -29,7 +29,7 @@ CREATE TABLE if not exists levels (
   created_at DATETIME,
   updated_at DATETIME
   );
-  
+
 
 CREATE TABLE if not exists questions(
   id int(11) NOT NULL auto_increment PRIMARY KEY,
@@ -40,7 +40,7 @@ CREATE TABLE if not exists questions(
   created_at DATETIME,
   updated_at DATETIME
   );
-  
+
 
 CREATE TABLE if not exists comments (
   id  int(11) NOT NULL auto_increment PRIMARY KEY,
@@ -58,7 +58,6 @@ CREATE TABLE IF NOT EXISTS options(
   created_at DATETIME,
   updated_at DATETIME
 )ENGINE=InnoDB;
-
 
 
 CREATE TABLE IF NOT EXISTS games(
