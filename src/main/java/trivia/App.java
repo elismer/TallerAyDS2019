@@ -121,9 +121,12 @@ static LazyList <Option> options;
       	return user;
       });
 
-      get("/game", (req, res) -> {
-      	LazyList <Question> questions = Question.where("category_id = ?", 1);
-      	Question question = questions.get(0);
+      post("/game", (req, res) -> {
+				Map<String, Object> bodyParams = new Gson().fromJson(req.body(), Map.class);
+				Category category = Category.findById(bodyParams.get("category_id"));
+      	LazyList<Question> questions = category.getAll(Question.class);
+				int cant= (int) (Math.random() * questions.size());
+      	Question question = questions.get(cant);
       	System.out.println("Descripcion de la pregunta: " + question.get("description"));
       	options = question.getAll(Option.class);
       	for (Option o: options)
@@ -137,10 +140,12 @@ static LazyList <Option> options;
       post("/questions", (req, res) -> {
       	QuestionParam bodyParams = new Gson().fromJson(req.body(), QuestionParam.class);
       	Question question = new Question();
+				Category category= Category.findById(bodyParams.category_id);
       	question.set("description", bodyParams.description);
-      	question.set("category_id", bodyParams.category_id);
+				category.add(question);
 
       	question.saveIt();
+
 
       	for(Option item: bodyParams.options) {
           		Option option = new Option();
@@ -182,6 +187,14 @@ static LazyList <Option> options;
 
 			 return com;
       });
+
+			get ("/categories", (req,res) -> {
+				LazyList<Category> cat= Category.findAll();
+				for (Category category:cat){
+						System.out.println(category);
+				}
+				return cat;
+			});
 
        post("/stats", (req, res) -> {
       	Map<String, Object> bodyParams = new Gson().fromJson(req.body(), Map.class);
