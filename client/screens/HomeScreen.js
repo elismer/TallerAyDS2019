@@ -2,6 +2,8 @@ import React from 'react';
 import {
   AsyncStorage,
   Image,
+  Alert,
+  Button,
   Platform,
   ScrollView,
   StyleSheet,
@@ -26,7 +28,7 @@ export default class HomeScreen extends React.Component {
             <Image
               source={
                 __DEV__
-                  ? require('../assets/images/robot-dev.png')
+                  ? require('../assets/images/96e59f072a470de5fb2dc9966b2d9291.jpg')
                   : require('../assets/images/robot-prod.png')
               }
               style={styles.welcomeImage}
@@ -42,13 +44,43 @@ export default class HomeScreen extends React.Component {
               <MonoText style={styles.codeHighlightText}>screens/HomeScreen.js</MonoText>
             </View>
 
-            <Text style={styles.getStartedText}>
-              Change this text and your app will automatically reload.
-            </Text>
+            <Text style={styles.getStartedText}>Bienvenido</Text>
 
-            <Text onPress={this._handleLogout} style={styles.logout}>
-              Logout
-            </Text>
+          <View style = {styles.buttonContainer}>
+
+            <Button title="Press me!" onPress={() =>{
+              Alert.alert('You tapped the button');
+            }}
+            />
+
+          </View>
+
+
+            <View style = {styles.buttonContainer}>
+
+              <Button title = "Jugar"/>
+
+            </View>
+
+            <View style = {styles.buttonContainer}>
+
+              <Button title = "Estadisticas"/>
+
+            </View>
+
+            <View style = {styles.buttonContainer}>
+
+              <Button title = "Comentarios"/>
+
+            </View>
+
+            <View style = {styles.buttonContainer}>
+
+              <Button title = "LogOut" onPress={this._handleLogout}/>
+
+            </View>
+
+
           </View>
 
           <View style={styles.helpContainer}>
@@ -200,4 +232,9 @@ const styles = StyleSheet.create({
     color: '#2e78b7',
     textAlign: 'center',
   },
+
+  buttonContainer: {
+    margin: 5
+  },
+
 });
