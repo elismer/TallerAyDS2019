@@ -16,10 +16,13 @@ export default class PlayingScreen extends React.Component{
     title: 'JUEGO'
   };
   render (){
+    const {navigation}= this.props;
+    const data=navigation.getParam('description','No-question');
     return (
-    <Text style={styles.developmentModeText}>HOLA</Text>
-  );
-}
+      <Text style={styles.developmentModeText}>
+      Pregunta: {JSON.stringify(data)}</Text>
+    );
+  }
 }
 const styles = StyleSheet.create({
   developmentModeText: {

@@ -11,6 +11,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import axios from 'axios';
 import { WebBrowser } from 'expo';
 
 import { MonoText } from '../components/StyledText';
@@ -59,7 +60,7 @@ export default class HomeScreen extends React.Component {
 
             <View style = {styles.buttonContainer}>
 
-            <Button title="Jugar" onPress={() => navigate('Play')}
+            <Button title="Jugar" onPress={this._Play}
             />
 
             </View>
@@ -103,6 +104,23 @@ export default class HomeScreen extends React.Component {
       </View>
     );
   }
+
+  _Play=() => {
+    axios.post("http://192.168.0.2:4567/game",{
+      category_id:1
+    }, {
+      auth: {
+        username:"admin",
+        password:"admin"
+      }
+    })
+    .then(response => JSON.parse(JSON.stringify(response)))
+    .then(response => {
+      var a=JSON.parse(JSON.stringify(response.data.Pregunta));
+      console.log(a);
+      this.props.navigation.navigate('Play', {'description': JSON.parse(JSON.stringify(a.description))});
+    })
+  };
 
   _handleLogout = async () => {
     await AsyncStorage.clear();

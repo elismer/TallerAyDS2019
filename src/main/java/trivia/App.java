@@ -127,12 +127,18 @@ static LazyList <Option> options;
       	LazyList<Question> questions = category.getAll(Question.class);
 				int cant= (int) (Math.random() * questions.size());
       	Question question = questions.get(cant);
+				String aux= "{\"Pregunta\":"+ question.toJson(true,"description");
       	System.out.println("Descripcion de la pregunta: " + question.get("description"));
       	options = question.getAll(Option.class);
-      	for (Option o: options)
+				int i=1;
+      	for (Option o: options){
       		System.out.println(o.get("description"));
-
-      	return options;
+					aux= aux+", \"Opcion"+i+ "\" :  "+o.toJson(true,"description");
+					i++;
+				}
+				aux=aux+"}";
+				res.type("application/json");
+      	return aux;
 
       });
 

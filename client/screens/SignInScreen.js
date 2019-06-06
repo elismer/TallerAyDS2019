@@ -45,6 +45,7 @@ export default class SignInScreen extends React.Component {
         />
 
         <Button title="Sign in!" onPress={this._signIn} />
+
       </View>
     );
   }
