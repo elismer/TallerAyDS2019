@@ -21,6 +21,7 @@ export default class HomeScreen extends React.Component {
   };
 
   render() {
+    const {navigate} = this.props.navigation;
     return (
       <View style={styles.container}>
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
@@ -58,19 +59,21 @@ export default class HomeScreen extends React.Component {
 
             <View style = {styles.buttonContainer}>
 
-              <Button title = "Jugar"/>
+            <Button title="Jugar" onPress={() => navigate('Play')}
+            />
 
             </View>
 
             <View style = {styles.buttonContainer}>
 
-              <Button title = "Estadisticas"/>
+              <Button title ="Estadisticas" onPress={() =>navigate('Stat')}
+              />
 
             </View>
 
             <View style = {styles.buttonContainer}>
 
-              <Button title = "Comentarios"/>
+              <Button title = "Comentarios" onPress={()=>navigate('Comment')}/>
 
             </View>
 
