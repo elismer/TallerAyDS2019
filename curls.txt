@@ -1,0 +1,3 @@
+curl -u admin:admin POST http://localhost:4567/users -H 'content-type: application/json' -d '{"dni":"21562517", "username": "joe", "last_name":"wakamole", "password":"abc", "nick_name":"hola","year":"2"}'
+curl -u admin:admin POST http://localhost:4567/questions -H 'content-type: application/json' -d '{"description":"question1","category_id":"2","active":true,"options":[{"description":"optionA","type":"CORRECT"},{"description":"optionB","type":"INCORRECT"},{"description":"optionC","type":"INCORRECT"},{"description":"optionD","type":"INCORRECT"},{"description":"UNKNOW","type":"UNKNOW"}]}'
+curl -u admin:admin GET http://localhost:4567/options/3
