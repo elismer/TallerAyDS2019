@@ -9,6 +9,8 @@ import static spark.Spark.after;
 import static spark.Spark.options;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+
 import org.javalite.activejdbc.LazyList;
 
 import org.javalite.activejdbc.Base;
@@ -110,19 +112,36 @@ public class App {
 
 		get("/game/:category_id", (req, res) -> {
 			Category category = Category.findById(req.params("category_id"));
-			LazyList<Question> AllQuestionsOfCategory = category.getAll(Question.class);
-			LazyList<Game> games = currentUser.getAll(Game.class);
+			LazyList<Game> games = currentUser.getAll(Game.class);// Sacamos el juego del usuario
 			Game game = games.get(0);
-			LazyList<Option> optionsCorrects = game.get(Option.class, "type = ?", "CORRECT");
-			int cant = (int) (Math.random() * questions.size());
-			Question question = questions.get(cant);
+			LazyList<Option> optionsCorrects = game.get(Option.class, "type = ?", "CORRECT");// Obtenemos las respuestas
+																								// que fueron correctas
+			HashSet<Integer> idsOfQuestions = new HashSet<Integer>();// Creamos un conjunto para tener los id's de las
+																		// preguntas
+			for (Option o : optionsCorrects) {
+				idsOfQuestions.add((int) o.get("question_id"));// Agragamos los id's al conjunto
+			}
+			LazyList<Question> unansweredQuestions = category.getAll(Question.class);// Creamos un copia de todas las
+			// preguntas
+			for (int i = 0; i < unansweredQuestions.size(); i++) {// Para todas las preguntas de la categoria
+				Question q = unansweredQuestions.get(i);
+				if (idsOfQuestions.contains(q.get("id"))) {// Si su id esta en el conjunto de las respondidas
+					unansweredQuestions.remove(i);// Lo sacamos del conjunto de las no respondidas
+				}
+			}
+			Question question = new Question();
+			if (!unansweredQuestions.isEmpty()) {
+				int cant = (int) (Math.random() * unansweredQuestions.size());
+				question = unansweredQuestions.get(cant);
+			}
+			// Question question = AllQuestionsOfCategory.get(cant);
 			/*
 			 * System.out.println("Descripcion de la pregunta: " +
 			 * question.get("description")); options = question.getAll(Option.class); for
 			 * (Option o : options) System.out.println(o.get("description"));
 			 */
+			// return question.toJson(true);
 			return question.toJson(true);
-
 		});
 
 		post("/questions", (req, res) -> {
