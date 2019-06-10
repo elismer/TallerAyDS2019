@@ -127,6 +127,7 @@ public class App {
 				Question q = unansweredQuestions.get(i);
 				if (idsOfQuestions.contains(q.get("id"))) {// Si su id esta en el conjunto de las respondidas
 					unansweredQuestions.remove(i);// Lo sacamos del conjunto de las no respondidas
+					i--;
 				}
 			}
 			Question question = new Question();
