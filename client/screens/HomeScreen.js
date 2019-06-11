@@ -20,12 +20,9 @@ export default class HomeScreen extends React.Component {
     header: null
   };
 
-  componentDidMount() {
-    const user = getUser();
-    console.log("HOME - user is:", user);
-  }
-
   render() {
+    const user = getUser();
+    const {navigate} = this.props.navigation;
     return (
       <View style={styles.container}>
         <ScrollView
@@ -36,7 +33,7 @@ export default class HomeScreen extends React.Component {
             <Image
               source={
                 __DEV__
-                  ? require("../assets/images/robot-dev.png")
+                  ? require("../assets/images/96e59f072a470de5fb2dc9966b2d9291.jpg")
                   : require("../assets/images/robot-prod.png")
               }
               style={styles.welcomeImage}
@@ -46,53 +43,52 @@ export default class HomeScreen extends React.Component {
           <View style={styles.getStartedContainer}>
             {this._maybeRenderDevelopmentModeWarning()}
 
-            <Text style={styles.getStartedText}>Get started by opening</Text>
-
-            <View
-              style={[styles.codeHighlightContainer, styles.homeScreenFilename]}
-            >
-              <MonoText style={styles.codeHighlightText}>
-                screens/HomeScreen.js
-              </MonoText>
-            </View>
 
             <Text style={styles.getStartedText}>
-              Change this text and your app will automatically reload.
+              Bienvenido {user.username}!
             </Text>
-            <View style={styles.buttonStyle}>
+            <View style={styles.buttonContainer}>
               <Button
                 onPress={this._handlePlay}
-                title="Play"
+                title="JUGAR"
                 color="#121584"
                 accessibilityLabel="Learn more about this button"
               />
             </View>
+            <View style = {styles.buttonContainer}>
             <Button
               onPress={this._handleSettings}
               title="Settings"
-              color="#849584"
-              accessibilityLabel="Learn more about this button"
-            />
-            <Button
-              onPress={this.onPressCategoryButton.bind(this, "Anatomia")}
-              title="Anatomia"
-              color="#841584"
-              accessibilityLabel="Learn more about this button"
-            />
-
-            <Button
-              onPress={this.onPressCategoryButton.bind(this, "Dinosaurios")}
-              title="Dinosaurios"
-              color="#a4f590"
-              accessibilityLabel="Learn more about this button"
-            />
-
-            <Button
-              onPress={this._handleLogout}
-              title="Logout"
               color="#121584"
               accessibilityLabel="Learn more about this button"
             />
+            </View>
+
+            <View style = {styles.buttonContainer}>
+              <Button
+                onPress={this.onPressCategoryButton.bind(this, "ESTADISTICAS")}
+                title="ESTADISTICAS"
+                color="#121584"
+                accessibilityLabel="Learn more about this button"
+              />
+            </View>
+
+            <View style = {styles.buttonContainer}>
+              <Button
+                onPress={()=>navigate('Comment')}
+                title="COMENTARIOS"
+                color="#121584"
+                accessibilityLabel="Learn more about this button"
+                />
+            </View>
+            <View style = {styles.buttonContainer}>
+              <Button
+                onPress={this._handleLogout}
+                title="Logout"
+                color="#121584"
+                accessibilityLabel="Learn more about this button"
+              />
+            </View>
           </View>
 
           <View style={styles.helpContainer}>
@@ -106,20 +102,6 @@ export default class HomeScreen extends React.Component {
             </TouchableOpacity>
           </View>
         </ScrollView>
-
-        <View style={styles.tabBarInfoContainer}>
-          <Text style={styles.tabBarInfoText}>
-            This is a tab bar. You can edit it in:
-          </Text>
-
-          <View
-            style={[styles.codeHighlightContainer, styles.navigationFilename]}
-          >
-            <MonoText style={styles.codeHighlightText}>
-              navigation/MainTabNavigator.js
-            </MonoText>
-          </View>
-        </View>
       </View>
     );
   }
@@ -276,5 +258,8 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     shadowRadius: 5,
     shadowOpacity: 0.5
-  }
+  },
+  buttonContainer: {
+    margin: 5
+  },
 });

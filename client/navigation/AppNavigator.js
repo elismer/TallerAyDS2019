@@ -11,6 +11,7 @@ import AuthLoadingScreen from "../screens/AuthLoadingScreen";
 import SettingsScreen from "../screens/SettingsScreen";
 import PlayScreen from "../screens/PlayScreen";
 import AnswersScreen from "../screens/AnswersScreen";
+import CommentScreen from "../screens/CommentScreen";
 
 
 const AppStack = createStackNavigator({
@@ -18,7 +19,8 @@ const AppStack = createStackNavigator({
   Other: OtherScreen,
   Settings: SettingsScreen,
   Play: PlayScreen,
-  Answers: AnswersScreen
+  Answers: AnswersScreen,
+  Comment: CommentScreen
 });
 const AuthStack = createStackNavigator({ SignIn: SignInScreen });
 

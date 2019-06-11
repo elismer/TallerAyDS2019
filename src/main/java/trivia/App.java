@@ -44,8 +44,12 @@ public class App {
 	public static void main(String[] args) {
 
 		before((request, response) -> {
-			Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost:3306/trivia_dev", "root", "root");
-			// Base.open();
+			if (Base.hasConnection()){
+				Base.close();
+			}
+			if (!Base.hasConnection())
+			//Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost:3306/trivia_dev", "root", "root");
+			Base.open();
 			String headerToken = (String) request.headers("Authorization");
 			System.out.println("headerToken: " + headerToken);
 			if (headerToken == null || headerToken.isEmpty() || !BasicAuth.authorize(headerToken)) {
@@ -77,7 +81,7 @@ public class App {
 
 		/*
 		 * get("/hello/:name", (req, res) -> { return "hello" + req.params(":name"); });
-		 * 
+		 *
 		 * System.out.println("hola mundo");
 		 */
 

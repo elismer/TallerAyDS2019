@@ -46,7 +46,7 @@ CREATE TABLE if not exists questions(
 
 CREATE TABLE if not exists comments (
   id  int(11) NOT NULL auto_increment PRIMARY KEY,
-  description VARCHAR(140) NOT NULL,
+  description TEXT NOT NULL,
   user_id int(11) NOT NULL,
   created_at DATETIME,
   updated_at DATETIME
