@@ -41,9 +41,9 @@ export default class HomeScreen extends React.Component {
           </View>
 
           <View style={styles.getStartedContainer}>
-            {this._maybeRenderDevelopmentModeWarning()}
-
-
+            <Text style= {styles.titleText}>
+              TRIVIA VET
+            </Text>
             <Text style={styles.getStartedText}>
               Bienvenido {user.username}!
             </Text>
@@ -202,6 +202,12 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0,0,0,0.05)",
     borderRadius: 3,
     paddingHorizontal: 4
+  },
+  titleText: {
+    fontSize: 25,
+    textAlign:"center",
+    marginTop:5,
+    marginBottom:10
   },
   getStartedText: {
     fontSize: 17,
