@@ -79,12 +79,7 @@ public class App {
 			return currentUser.toJson(true);
 		});
 
-		/*
-		 * get("/hello/:name", (req, res) -> { return "hello" + req.params(":name"); });
-		 *
-		 * System.out.println("hola mundo");
-		 */
-
+		//post para cargar usuario
 		post("/users", (req, res) -> {
 			Map<String, Object> bodyParams = new Gson().fromJson(req.body(), Map.class);
 
@@ -113,7 +108,7 @@ public class App {
 				System.out.println("Su username es: " + u.get("username") + ", su dni es: " + u.get("dni"));
 			return user;
 		});
-
+		//get para jugar segun la categoria elegida
 		get("/game/:category_id", (req, res) -> {
 			Category category = Category.findById(req.params("category_id"));
 			LazyList<Game> games = currentUser.getAll(Game.class);// Sacamos el juego del usuario
@@ -134,21 +129,15 @@ public class App {
 					i--;
 				}
 			}
-			Question question = new Question();
-			if (!unansweredQuestions.isEmpty()) {
-				int cant = (int) (Math.random() * unansweredQuestions.size());
-				question = unansweredQuestions.get(cant);
+			Question question = new Question(); //creamos una nueva question
+			if (!unansweredQuestions.isEmpty()) { // Si la lista no es vacia
+				int cant = (int) (Math.random() * unansweredQuestions.size()); // Le damos una pregunta al azar
+				question = unansweredQuestions.get(cant); // en el caso que sea vacia la lista la pregunta va a quedar en blanco, eso
+             													// significa que la categoria esta completada
 			}
-			// Question question = AllQuestionsOfCategory.get(cant);
-			/*
-			 * System.out.println("Descripcion de la pregunta: " +
-			 * question.get("description")); options = question.getAll(Option.class); for
-			 * (Option o : options) System.out.println(o.get("description"));
-			 */
-			// return question.toJson(true);
 			return question.toJson(true);
 		});
-
+		//post para cargar preguntas con sus respectivas opciones
 		post("/questions", (req, res) -> {
 			QuestionParam bodyParams = new Gson().fromJson(req.body(), QuestionParam.class);
 			Question question = new Question();
@@ -168,6 +157,7 @@ public class App {
 			return question.toJson(true);
 		});
 
+		//get para obtener las opciones de una pregunta
 		get("/options/:question_id", (req, res) -> {
 			Question question = Question.findById(req.params("question_id"));
 			LazyList<Option> options = question.getAll(Option.class);
@@ -185,7 +175,7 @@ public class App {
 			}
 			return question.toJson(true);
 		});
-
+		//post para cargar comentario
 		post("/comments", (req, res) -> {
 			Map<String, Object> bodyParams = new Gson().fromJson(req.body(), Map.class);
 
@@ -197,16 +187,17 @@ public class App {
 
 			return comment.toJson(true);
 		});
-
+		//get para obtener todos los comentarios
 		get("/comments", (req, res) -> {
 			LazyList<Comment> com = Comment.findAll();
 			for (Comment comment : com) {
 				System.out.println(comment);
 			}
-
-			return com;
+			res.type("application/json");
+			return com.toJson(true);
 		});
 
+		//get para obtener las categorias
 		get("/categories", (req, res) -> {
 			LazyList<Category> cat = Category.findAll();
 			for (Category category : cat) {
@@ -225,6 +216,7 @@ public class App {
 			return stat.toJson(true);
 		});
 
+		//post para contestar
 		post("/answers", (req, res) -> {
 			Map<String, Object> bodyParams = new Gson().fromJson(req.body(), Map.class);
 			Answer answer = new Answer();
