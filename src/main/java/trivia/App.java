@@ -45,7 +45,7 @@ public class App {
 
 		before((request, response) -> {
 			Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost:3306/trivia_dev", "root", "root");
-
+			// Base.open();
 			String headerToken = (String) request.headers("Authorization");
 			System.out.println("headerToken: " + headerToken);
 			if (headerToken == null || headerToken.isEmpty() || !BasicAuth.authorize(headerToken)) {

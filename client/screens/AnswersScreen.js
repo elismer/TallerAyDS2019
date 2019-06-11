@@ -11,6 +11,7 @@ import {
   Button
 } from "react-native";
 import { WebBrowser } from "expo";
+import isEmpty from "lodash/isEmpty";
 import axios from "../utils/axios";
 import { MonoText } from "../components/StyledText";
 
@@ -22,6 +23,10 @@ export default class AnswersScreen extends React.Component {
   constructor(props) {
     super(props);
     const question = props.navigation.getParam("question");
+    if (isEmpty(question)) {
+      alert("Categoria Completada!");
+      this.props.navigation.goBack();
+    }
     this.state = {
       question: question,
       options: []
@@ -31,6 +36,7 @@ export default class AnswersScreen extends React.Component {
 
   render() {
     const { question, options } = this.state;
+    this.shuffleArray(options);
     return (
       <View style={styles.container}>
         <Text style={styles.getStartedText}>{question.description}</Text>
@@ -61,9 +67,29 @@ export default class AnswersScreen extends React.Component {
       })
       .then(response => {
         alert(option.type);
-        this.props.navigation.goBack();
+        axios.get("/game/" + this.state.question.category_id).then(response => {
+          let question = response.data;
+          if (!isEmpty(question)) {
+            this.setState({ question });
+            this.loadOptions(question.id);
+          } else {
+            alert("Categoria Completada!");
+            this.props.navigation.goBack();
+          }
+        });
       });
   };
+
+  shuffleArray(array) {
+    let i = array.length - 1;
+    for (; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      const temp = array[i];
+      array[i] = array[j];
+      array[j] = temp;
+    }
+    return array;
+  }
 }
 
 const styles = StyleSheet.create({
