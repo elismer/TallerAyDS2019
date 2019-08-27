@@ -86,7 +86,7 @@ export default class SignInScreen extends React.Component {
           return;
         }
         console.warn(error);
-        alert("Networking Error");
+        alert(error);
       });
   };
 }
