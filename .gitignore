@@ -2,3 +2,5 @@ target/
 
 src/main/resources/database.properties
 
+client/.env
+client/babel.config.js
