@@ -4,14 +4,14 @@ use trivia_dev;
 
 CREATE TABLE if not exists users (
   id  int(11) NOT NULL auto_increment PRIMARY KEY,
-  nick_name VARCHAR (56) NOT NULL,
+  first_name VARCHAR (56) NOT NULL,
+  last_name VARCHAR(56) NOT NULL,
   dni int(8) NOT NULL,
   username VARCHAR(56) NOT NULL,
-  last_name VARCHAR(56) NOT NULL,
   password VARCHAR(24) NOT NULL,
   admin BOOLEAN default FALSE,
   year ENUM ('1','2','3','4','5','6','graduated','noStudent') default NULL,
-  UNIQUE (dni,nick_name),
+  UNIQUE (dni,username),
   created_at DATETIME,
   updated_at DATETIME
 );
@@ -80,7 +80,10 @@ CREATE TABLE IF NOT EXISTS games_options(
 
 CREATE TABLE IF NOT EXISTS stats(
   id int(11) NOT NULL auto_increment PRIMARY KEY,
-  cantquestions int,
+  cant_total_questions int,
+  cant_incorrect_questions int,
+  cant_correct_questions int,
+  cant_unknown_questions int,
   user_id int NOT NULL,
   created_at DATETIME,
   updated_at DATETIME

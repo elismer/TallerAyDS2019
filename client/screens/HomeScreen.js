@@ -11,7 +11,7 @@ import {
   Button
 } from "react-native";
 import { WebBrowser } from "expo";
-
+import axios from "../utils/axios";
 import { MonoText } from "../components/StyledText";
 import { getUser } from "../utils/auth";
 
@@ -66,7 +66,7 @@ export default class HomeScreen extends React.Component {
 
             <View style = {styles.buttonContainer}>
               <Button
-                onPress={this.onPressCategoryButton.bind(this, "ESTADISTICAS")}
+                onPress={this._handleStat}
                 title="ESTADISTICAS"
                 color="#121584"
                 accessibilityLabel="Learn more about this button"
@@ -123,6 +123,14 @@ export default class HomeScreen extends React.Component {
   _handlePlay = async () => {
     await AsyncStorage.clear();
     this.props.navigation.navigate("Play");
+  };
+
+  _handleStat = async () => {
+    await AsyncStorage.clear();
+    axios.get("/stats").then(response => {
+      let stat = response.data;
+      this.props.navigation.navigate("Stat", { stat });
+    });
   };
 
   _maybeRenderDevelopmentModeWarning() {
