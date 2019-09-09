@@ -1,6 +1,13 @@
 Posts para cargar pregunas en las categorias 1 y 2, para probar
 
+# POST para crear preguntas con sus respuestas
 curl -u admin:admin POST http://localhost:4567/questions -H 'content-type: application/json' -d '{"description":"¿Cuantas vidas tiene un gato?","category_id":"1","options":[{"description":"7","type":"CORRECT"},{"description":"1","type":"INCORRECT"},{"description":"0","type":"INCORRECT"},{"description":"34","type":"INCORRECT"},{"description":"unknow","type":"UNKNOW"}]}'
-curl -u admin:admin POST http://localhot:4567/questions -H 'content-type: application/json' -d '{"description":"¿Cuanta leche da la vaca en su vida?","category_id":"1","options":[{"description":"Lo mismo que en bajada","type":"CORRECT"},{"description":"mucha","type":"INCORRECT"},{"description":"poca","type":"INCORRECT"},{"description":"mas o menos","type":"INCORRECT"},{"description":"unknow","type":"UNKNOW"}]}'
-curl -u admin:admin POST http://localhot:4567/questions -H 'content-type: application/json' -d '{"description":"¿Cual es el animal que es 2 veces animal?","category_id":"2","options":[{"description":"Carancho riocuartense","type":"INCORRECT"},{"description":"Jimena Baron","type":"CORRECT"},{"description":"Sapo guerrere peruano","type":"INCORRECT"},{"description":"Lobo manto negro","type":"INCORRECT"},{"description":"unknow","type":"UNKNOW"}]}'
-curl -u admin:admin POST http://localhot:4567/questions -H 'content-type: application/json' -d '{"description":"¿Cuantas patas tiene una araña?","category_id":"2","options":[{"description":"6","type":"INCORRECT"},{"description":"4","type":"INCORRECT"},{"description":"10","type":"INCORRECT"},{"description":"8","type":"CORRECT"},{"description":"unknow","type":"UNKNOW"}]}'
+curl -u admin:admin POST http://localhost:4567/questions -H 'content-type: application/json' -d '{"description":"¿Cuanta leche da la vaca en su vida?","category_id":"1","options":[{"description":"Lo mismo que en bajada","type":"CORRECT"},{"description":"mucha","type":"INCORRECT"},{"description":"poca","type":"INCORRECT"},{"description":"mas o menos","type":"INCORRECT"},{"description":"unknow","type":"UNKNOW"}]}'
+curl -u admin:admin POST http://localhost:4567/questions -H 'content-type: application/json' -d '{"description":"¿Cual es el animal que es 2 veces animal?","category_id":"2","options":[{"description":"Carancho riocuartense","type":"INCORRECT"},{"description":"Jimena Baron","type":"CORRECT"},{"description":"Sapo guerrere peruano","type":"INCORRECT"},{"description":"Lobo manto negro","type":"INCORRECT"},{"description":"unknow","type":"UNKNOW"}]}'
+curl -u admin:admin POST http://localhost:4567/questions -H 'content-type: application/json' -d '{"description":"¿Cuantas patas tiene una araña?","category_id":"1","options":[{"description":"6","type":"INCORRECT"},{"description":"4","type":"INCORRECT"},{"description":"10","type":"INCORRECT"},{"description":"8","type":"CORRECT"},{"description":"unknow","type":"UNKNOW"}]}'
+
+#POST para crear usuarios
+curl -u admin:admin POST http://localhost:4567/users -H 'content-type: application/json' -d '{"dni":"21562517", "username": "joe", "last_name":"wakamole", "password":"abc", "nick_name":"hola","year":"2"}'
+
+#GET para ver opciones
+curl -u admin:admin GET http://localhost:4567/options/3

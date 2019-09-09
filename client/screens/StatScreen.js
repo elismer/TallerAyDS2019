@@ -45,7 +45,7 @@ export default class StatScreen extends React.Component {
           </Text>
         </TouchableNativeFeedback>
         <TouchableNativeFeedback
-        onPress={this.handleType("UNKNOWN")}>
+        onPress={this.handleType("UNKNOW")}>
           <Text style={styles.developmentModeText}>
             No respondidas {stat.cant_unknown_questions}
           </Text>
