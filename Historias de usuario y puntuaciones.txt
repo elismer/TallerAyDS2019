@@ -1,0 +1,89 @@
+Historias de usuario y puntuaciones:
+
+Historia 1: Un usuario no registrado desea registrarse en el sistema.
+	Dado un usuario no registrado
+	y dicho usuario quiere registrarse en el sistema
+	y selecciona como nombre "Juan"
+	y selecciona como apellido "Goldenberg"
+	y selecciona como dni "40928243"
+	y selecciona como año "3"
+	y selecciona como clave "1245"
+	Cuando intenta crear una cuenta con los credenciales dados
+	Entonces el sistema deberia crear una cuenta 
+	y crear un nuevo id para el usuario
+	y deberia informar al usuario que fue registrado exitosamente
+
+Puntuacion:
+
+Historia 2: Un usuario registrado desea loguearse en el sistema.
+	Dado un usuario ya registrado en el sistema
+	y dicho usuario quiere loguearse en el sistema
+	y selecciona como nombre "Juan"
+	y selecciona como apellido "Goldenberg"
+	y selecciona como dni "40928243"
+	y selecciona como año "3"
+	y selecciona como clave "1245"
+	Cuando intenta loguearse con los credenciales dados
+	Entonces el usuario se loguea en el sistema
+	y es redireccionada a la pantalla principal
+	
+Puntuacion: 
+
+Historia 3: Un usuario logueado desea desloguearse del sistema
+	Dado un usuario logueado
+	y dicho usuario quiere desloguearse del sistema
+	Cuando intenta desloguearse
+	Entonces el sistema deberia desloguear al usuario 
+	y redireccionarlo a la pantalla de login
+
+Puntuacion:
+
+Historia 4: Un usuario de tipo admin desea loguearse en el sistema
+	Dado un usuario de tipo admin
+	y dicho usuario quiere loguearse en el sistema
+	y selecciona como nombre "Agustin"
+	y selecciona como apellido "Costa"
+	y selecciona como dni "40928578"
+	y selecciona como clave "1245"
+	Cuando intenta loguearse con los credenciales dados
+	Entonces el usuario se loguea en el sistema
+	y es redireccionado a la pantalla principal de admins
+	
+Puntuacion:
+
+Historia 5: Un usuario logueado desea jugar
+	Dado un usuario ya logueado en el sistema
+	y dicho usuario desea jugar
+	y dicho usuario selecciona la categoria 2
+	Cuando el usuario selecciona una respuesta
+	Entonces el sistema guardara su respuesta
+	y el sistema le informara al usuario si su respuesta es correcta o no
+	y el sistema le mostrara otra pregunta o le informara que completo la categoria
+	
+Puntuacion:
+
+Historia 6: Un usuario logueado desea ver sus estadisticas
+	Dado un usario ya logueado en el sistema
+	y dicho usario desea ver sus estadisticas
+	Cuando el usuario entre a las estadisticas
+	Entonces el sistema le mostrara sus estadisticas
+
+Puntuacion:
+
+Historia 7: Un usuario admin desea cargar preguntas
+	Dado un usario admin ya logueado en el sistema
+	y discho usario desea cargar nuevas preguntas al sistema
+	y selecciona como categoria "4"
+	y selecciona como descripcion "¿Que organela tiene clorofila?"
+	y selecciona como opcion 1 "Mitocondria"
+	y selecciona como opcion 2 "Cloroplastos"
+	y selecciona como opcion 3 "RER"
+	y selecciona como opcion 4 "Ribosoma"
+	y selecciona como opcion correcta "2"
+	Cuando el usuario crea la pregunta
+	Entonces el sistema deberia guardar la nueva pregunta con sus opciones
+	y crear una id nueva para dicha pregunta
+
+Puntuacion:
+
+	
