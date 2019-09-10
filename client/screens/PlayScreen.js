@@ -105,7 +105,8 @@ const styles = StyleSheet.create({
   },
   itemText: {
     color: "#fff",
-    fontSize: 40
+    fontSize: 40,
+    textAlign: "center"
   },
   titleText: {
     color: "black",

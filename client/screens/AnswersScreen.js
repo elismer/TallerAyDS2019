@@ -37,8 +37,10 @@ export default class AnswersScreen extends React.Component {
     let optionsShuffle = shuffle(options);
     return (
       <View style={styles.container}>
+        <View style={styles.answersContainer}>
+          <Text style={styles.answersText}>{question.description}</Text>
+        </View>
         <View>
-          <Text style={styles.getStartedText}>{question.description}</Text>
           {optionsShuffle.map(option => (
             <View style={styles.buttonContainer}>
               <Button
@@ -101,6 +103,27 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.5
   },
   buttonContainer: {
+    margin: 5,
+  },
+  answersContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#d9d9d9",
+    padding: 65,
+    borderRadius: 20,
     margin: 5
+  },
+  answersText: {
+    fontSize:30,
+    color: "white",
+    shadowColor: "#000",
+    shadowOffset:{
+      width:0,
+      height: 9,
+    },
+    shadowRadius: 5,
+    shadowOpacity: 1
   }
+
+
 });
