@@ -1,11 +1,8 @@
 import React from "react";
 import {
-  AsyncStorage,
   View,
-  Text,
   TextInput,
   Button,
-  TouchableOpacity,
   StyleSheet
 } from "react-native";
 import axios from "../utils/axios";

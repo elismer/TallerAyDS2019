@@ -1,20 +1,13 @@
 import React from "react";
 import {
-  AsyncStorage,
-  Image,
-  Platform,
-  ScrollView,
   StyleSheet,
   Text,
-  TouchableOpacity,
   View,
   Button
 } from "react-native";
-import { WebBrowser } from "expo";
 import isEmpty from "lodash/isEmpty";
 import shuffle from "lodash/shuffle";
 import axios from "../utils/axios";
-import { MonoText } from "../components/StyledText";
 
 export default class AnswersScreen extends React.Component {
   static navigationOptions = {
@@ -65,13 +58,19 @@ export default class AnswersScreen extends React.Component {
     });
   };
 
-  onPressAnswerButton = option => {
+  onPressAnswerButton = option => async () => {
     axios
       .post("/answers", {
         chosen_option: option.id
       })
       .then(response => {
         alert(option.type);
+        let i = 0;
+        while(this.state.options[i].type == "CORRECT"){
+          i++;
+        }
+        optionCorrect = this.state.options[i]
+        this.props.navigation.navigate("Result", { option, optionCorrect });
         axios.get("/game/" + this.state.question.category_id).then(response => {
           let question = response.data;
           if (!isEmpty(question)) {
@@ -108,10 +107,11 @@ const styles = StyleSheet.create({
   answersContainer: {
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#d9d9d9",
+    backgroundColor: "#878787",
     padding: 65,
     borderRadius: 20,
-    margin: 5
+    margin: 5,
+    
   },
   answersText: {
     fontSize:30,

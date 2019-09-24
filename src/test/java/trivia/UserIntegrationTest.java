@@ -71,7 +71,8 @@ public class UserIntegrationTest {
         u.set("dni", "23009456");
         u.set("first_name","admin");
         u.set("last_name","lopes");
-	//u.set("admin","TRUE");
+        u.set("admin",1);
+	      //u.set("admin","TRUE");
         u.saveIt();
         Base.close();
     }
@@ -79,7 +80,7 @@ public class UserIntegrationTest {
     @Test
     public void canCreateUser() {
       String username = "Alan";
-      String nick_name = "ConCas";
+      String first_name = "ConCas";
       String last_name = "Turing";
       String dni = "23456789";
       String password= "abc";
@@ -89,7 +90,7 @@ public class UserIntegrationTest {
       parameters.put("password", password);
       parameters.put("last_name",last_name);
       parameters.put("dni",dni);
-      parameters.put("first_name", nick_name);
+      parameters.put("first_name", first_name);
 
       UrlResponse response = doRequest("POST", "/users", parameters);
       Map<String, Object> jsonResponse = new Gson().fromJson(response.body, Map.class);

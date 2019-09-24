@@ -1,9 +1,6 @@
 import React from "react";
 import {
-  AsyncStorage,
   FlatList,
-  Platform,
-  ScrollView,
   StyleSheet,
   Text,
   Dimensions,
