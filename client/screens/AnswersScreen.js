@@ -5,7 +5,6 @@ import {
   View,
   Button
 } from "react-native";
-import isEmpty from "lodash/isEmpty";
 import shuffle from "lodash/shuffle";
 import axios from "../utils/axios";
 
@@ -20,14 +19,16 @@ export default class AnswersScreen extends React.Component {
 
     this.state = {
       question: question,
-      options: []
+      options: [],
+      optionCorrect: null
     };
     this.loadOptions(question.id);
   }
 
   render() {
-    const { question, options } = this.state;
+    const { question, options, optionCorrect } = this.state;
     let optionsShuffle = shuffle(options);
+    console.log(optionCorrect);
     return (
       <View style={styles.container}>
         <View style={styles.answersContainer}>
@@ -37,7 +38,6 @@ export default class AnswersScreen extends React.Component {
           {optionsShuffle.map(option => (
             <View style={styles.buttonContainer}>
               <Button
-                key={option.id}
                 onPress={this.onPressAnswerButton.bind(this, option)}
                 title={option.description}
                 color="#121584"
@@ -54,37 +54,27 @@ export default class AnswersScreen extends React.Component {
   loadOptions = question_id => {
     axios.get("/options/" + question_id).then(response => {
       let options = response.data;
-      this.setState({ options });
+      options.map(option =>{
+        if(option.type=='CORRECT'){
+          let optionCorrect = option;
+          this.setState({ options, optionCorrect });
+        };
+      })
     });
   };
 
-  onPressAnswerButton = option => async () => {
+  onPressAnswerButton = option => () => {
     axios
       .post("/answers", {
         chosen_option: option.id
       })
       .then(response => {
-        alert(option.type);
-        let i = 0;
-        while(this.state.options[i].type == "CORRECT"){
-          i++;
-        }
-        optionCorrect = this.state.options[i]
-        this.props.navigation.navigate("Result", { option, optionCorrect });
-        axios.get("/game/" + this.state.question.category_id).then(response => {
-          let question = response.data;
-          if (!isEmpty(question)) {
-            this.setState({ question });
-            this.loadOptions(question.id);
-          } else {
-            alert("Categoria Completada!");
-            this.props.navigation.goBack();
-          }
-        });
+         let optionCorrect = this.state.optionCorrect;
+         this.props.navigation.navigate("Result", { option, optionCorrect});
       });
   };
 }
-
+ 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
