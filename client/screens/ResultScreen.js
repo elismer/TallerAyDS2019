@@ -5,6 +5,7 @@ import{
     View,
     Button
 } from "react-native"
+import isEmpty from "lodash/isEmpty";
 export default class ResultScreen extends React.Component{
     static navigationOptions = {
         title: "RESULTADO"
@@ -25,10 +26,10 @@ export default class ResultScreen extends React.Component{
       return (
         <View style={styles.container}>
           <View style={styles.answersContainer}>
-            <Text style={styles.answersText}>"Respuesta "{option}</Text>
+            <Text style={styles.answersText}>"Respuesta "{option.type}</Text>
           </View>
           <View>
-          <Text style={styles.answersText}>"Respuesta "{optionCorrect}</Text>
+          <Text style={styles.answersText}>"{optionCorrect.description}</Text>
           </View>
           <Button
             title="Volver a Home"
@@ -38,13 +39,24 @@ export default class ResultScreen extends React.Component{
           <Button
             title="Seguir Jugando"
             style={styles.buttonStyle}
-            onPress={this.props.navigation.goBack()}
+            onPress={this.onPressKeepPlay()}
           />
         </View>
       );
     }
 
     
+}
+onPressKeepPlay = ()=>{
+  axios.get("/game/" + this.state.question.category_id).then(response => {
+    let question = response.data;
+    if (!isEmpty(question)) {
+      this.props.navigation.goBack({ question });
+    } else {
+      alert("Categoria Completada!");
+      this.navigate.navigate("Play");
+    }
+  });
 }
 
 const styles = StyleSheet.create({
