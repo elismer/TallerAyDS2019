@@ -34,7 +34,6 @@ export default class CommentScreen extends React.Component {
     );
   }
   onPressCommentButton = text => {
-    console.log(this.state.text);
     axios.post("/comments", { description: text }).then(response => {
       alert("Comentario enviado");
       this.props.navigation.goBack();
