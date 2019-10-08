@@ -12,7 +12,6 @@ import {
 } from "react-native";
 import { WebBrowser } from "expo";
 import axios from "../utils/axios";
-import { MonoText } from "../components/StyledText";
 import { getUser } from "../utils/auth";
 
 export default class HomeScreen extends React.Component {

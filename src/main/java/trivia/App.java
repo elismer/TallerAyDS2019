@@ -177,10 +177,12 @@ public class App {
     });
     // post para cargar comentario
     post("/comments", (req, res) -> {
-      Map<String, Object> bodyParams = new Gson().fromJson(req.body(), Map.class);
+      Map<String, String> bodyParams = new Gson().fromJson(req.body(), Map.class);
 
       Comment comment = new Comment();
+      //String description = (String)bodyParams.get("description");
       comment.set("description", bodyParams.get("description"));
+
       currentUser.add(comment);
 
       res.type("application/json");

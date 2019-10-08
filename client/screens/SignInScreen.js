@@ -50,8 +50,21 @@ export default class SignInScreen extends React.Component {
             onPress={this._signIn}
           />
         </View>
+
+        <Text style={styles.welcome}> ¿No estás registrado? ¡Registrate aquí! </Text>
+        <View style={styles.buttonStyle}>
+          <Button
+            style={styles.buttonStyle}
+            title="Sign up!"
+            onPress={this._signUp}
+          />
+        </View>
       </View>
     );
+  }
+
+  _signUp = () => {
+    this.props.navigation.navigate("Register");
   }
 
   _signIn = () => {
