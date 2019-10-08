@@ -180,12 +180,8 @@ public class App {
       Map<String, String> bodyParams = new Gson().fromJson(req.body(), Map.class);
 
       Comment comment = new Comment();
-      System.out.println(bodyParams);
-      String description = (String) bodyParams.get("description");
-      System.out.println("***********************************");
-      System.out.println("description "+ description);
-      System.out.println("***********************************");
-      comment.set("description", description);
+      //String description = (String)bodyParams.get("description");
+      comment.set("description", bodyParams.get("description"));
 
       currentUser.add(comment);
 
