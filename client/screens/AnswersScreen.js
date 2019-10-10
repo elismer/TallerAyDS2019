@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  Button
-} from "react-native";
+import { StyleSheet, Text, View, Button } from "react-native";
 import shuffle from "lodash/shuffle";
 import axios from "../utils/axios";
 
@@ -16,11 +11,11 @@ export default class AnswersScreen extends React.Component {
   constructor(props) {
     super(props);
     const question = props.navigation.getParam("question");
-
     this.state = {
-      question: question,
+      question,
       options: [],
-      optionCorrect: null
+      optionCorrect: null,
+      isPress: false
     };
     this.loadOptions(question.id);
   }
@@ -28,7 +23,6 @@ export default class AnswersScreen extends React.Component {
   render() {
     const { question, options, optionCorrect } = this.state;
     let optionsShuffle = shuffle(options);
-    console.log(optionCorrect);
     return (
       <View style={styles.container}>
         <View style={styles.answersContainer}>
@@ -36,12 +30,15 @@ export default class AnswersScreen extends React.Component {
         </View>
         <View>
           {optionsShuffle.map(option => (
-            <View style={styles.buttonContainer}>
+            <View style={styles.buttonContainer} key={option.id}>
               <Button
-                onPress={this.onPressAnswerButton.bind(this, option)}
+                onPress={this.onPressAnswerButton(option)}
                 title={option.description}
-                color="#121584"
-                style={styles.buttonStyle}
+                style={
+                  this.state.optionPress
+                    ? styles.buttonStyle
+                    : styles.buttonStyle
+                }
                 accessibilityLabel="Learn more about this button"
               />
             </View>
@@ -54,12 +51,12 @@ export default class AnswersScreen extends React.Component {
   loadOptions = question_id => {
     axios.get("/options/" + question_id).then(response => {
       let options = response.data;
-      options.map(option =>{
-        if(option.type=='CORRECT'){
+      options.map(option => {
+        if (option.type == "CORRECT") {
           let optionCorrect = option;
           this.setState({ options, optionCorrect });
-        };
-      })
+        }
+      });
     });
   };
 
@@ -69,12 +66,21 @@ export default class AnswersScreen extends React.Component {
         chosen_option: option.id
       })
       .then(response => {
-         let optionCorrect = this.state.optionCorrect;
-         this.props.navigation.navigate("Result", { option, optionCorrect});
+        this.setState({ isPress: true });
+        console.log(this.state);
+        axios.get("/game/" + question.category_id).then(response => {
+          question = response.data;
+          if (!isEmpty(question)) {
+            this.props.navigation.navigate("Answer", { question });
+          } else {
+            alert("Categoria Completada!");
+            this.navigate.navigate("Play");
+          }
+        }, 5000);
       });
   };
 }
- 
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -89,10 +95,23 @@ const styles = StyleSheet.create({
   buttonStyle: {
     borderRadius: 16,
     shadowRadius: 5,
+    color: "#121584",
+    shadowOpacity: 0.5
+  },
+  buttonCorrectStyle: {
+    borderRadius: 16,
+    shadowRadius: 5,
+    color: "#04B404",
+    shadowOpacity: 0.5
+  },
+  buttonIncorrectStyle: {
+    borderRadius: 16,
+    shadowRadius: 5,
+    color: "#DF0101",
     shadowOpacity: 0.5
   },
   buttonContainer: {
-    margin: 5,
+    margin: 5
   },
   answersContainer: {
     justifyContent: "center",
@@ -100,20 +119,17 @@ const styles = StyleSheet.create({
     backgroundColor: "#878787",
     padding: 65,
     borderRadius: 20,
-    margin: 5,
-    
+    margin: 5
   },
   answersText: {
-    fontSize:30,
+    fontSize: 30,
     color: "white",
     shadowColor: "#000",
-    shadowOffset:{
-      width:0,
-      height: 9,
+    shadowOffset: {
+      width: 0,
+      height: 9
     },
     shadowRadius: 5,
     shadowOpacity: 1
   }
-
-
 });
