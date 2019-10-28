@@ -66,17 +66,17 @@ export default class AnswersScreen extends React.Component {
         chosen_option: option.id
       })
       .then(response => {
-        this.setState({ isPress: true });
-        console.log(this.state);
-        axios.get("/game/" + question.category_id).then(response => {
-          question = response.data;
+        alert(option.type);
+         axios.get("/game/" + this.state.question.category_id).then(response => {
+          let question = response.data;
           if (!isEmpty(question)) {
-            this.props.navigation.navigate("Answer", { question });
+            this.setState({ question });
+            this.loadOptions(question.id);
           } else {
             alert("Categoria Completada!");
-            this.navigate.navigate("Play");
+            this.props.navigation.goBack();
           }
-        }, 5000);
+		});
       });
   };
 }
