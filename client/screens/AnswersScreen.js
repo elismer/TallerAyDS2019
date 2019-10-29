@@ -1,7 +1,20 @@
 import React from "react";
-import { StyleSheet, Text, View, Button } from "react-native";
+import {
+  AsyncStorage,
+  Image,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  Button
+} from "react-native";
+import { WebBrowser } from "expo";
+import isEmpty from "lodash/isEmpty";
 import shuffle from "lodash/shuffle";
 import axios from "../utils/axios";
+import { MonoText } from "../components/StyledText";
 
 export default class AnswersScreen extends React.Component {
   static navigationOptions = {
@@ -11,34 +24,29 @@ export default class AnswersScreen extends React.Component {
   constructor(props) {
     super(props);
     const question = props.navigation.getParam("question");
+
     this.state = {
-      question,
-      options: [],
-      optionCorrect: null,
-      isPress: false
+      question: question,
+      options: []
     };
     this.loadOptions(question.id);
   }
 
   render() {
-    const { question, options, optionCorrect } = this.state;
+    const { question, options } = this.state;
     let optionsShuffle = shuffle(options);
     return (
       <View style={styles.container}>
-        <View style={styles.answersContainer}>
-          <Text style={styles.answersText}>{question.description}</Text>
-        </View>
         <View>
+          <Text style={styles.getStartedText}>{question.description}</Text>
           {optionsShuffle.map(option => (
-            <View style={styles.buttonContainer} key={option.id}>
+            <View style={styles.buttonContainer}>
               <Button
-                onPress={this.onPressAnswerButton(option)}
+                key={option.id}
+                onPress={this.onPressAnswerButton.bind(this, option)}
                 title={option.description}
-                style={
-                  this.state.optionPress
-                    ? styles.buttonStyle
-                    : styles.buttonStyle
-                }
+                color="#121584"
+                style={styles.buttonStyle}
                 accessibilityLabel="Learn more about this button"
               />
             </View>
@@ -51,23 +59,18 @@ export default class AnswersScreen extends React.Component {
   loadOptions = question_id => {
     axios.get("/options/" + question_id).then(response => {
       let options = response.data;
-      options.map(option => {
-        if (option.type == "CORRECT") {
-          let optionCorrect = option;
-          this.setState({ options, optionCorrect });
-        }
-      });
+      this.setState({ options });
     });
   };
 
-  onPressAnswerButton = option => () => {
+  onPressAnswerButton = option => {
     axios
       .post("/answers", {
         chosen_option: option.id
       })
       .then(response => {
         alert(option.type);
-         axios.get("/game/" + this.state.question.category_id).then(response => {
+        axios.get("/game/" + this.state.question.category_id).then(response => {
           let question = response.data;
           if (!isEmpty(question)) {
             this.setState({ question });
@@ -76,7 +79,7 @@ export default class AnswersScreen extends React.Component {
             alert("Categoria Completada!");
             this.props.navigation.goBack();
           }
-		});
+        });
       });
   };
 }
@@ -95,41 +98,9 @@ const styles = StyleSheet.create({
   buttonStyle: {
     borderRadius: 16,
     shadowRadius: 5,
-    color: "#121584",
-    shadowOpacity: 0.5
-  },
-  buttonCorrectStyle: {
-    borderRadius: 16,
-    shadowRadius: 5,
-    color: "#04B404",
-    shadowOpacity: 0.5
-  },
-  buttonIncorrectStyle: {
-    borderRadius: 16,
-    shadowRadius: 5,
-    color: "#DF0101",
     shadowOpacity: 0.5
   },
   buttonContainer: {
     margin: 5
-  },
-  answersContainer: {
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#878787",
-    padding: 65,
-    borderRadius: 20,
-    margin: 5
-  },
-  answersText: {
-    fontSize: 30,
-    color: "white",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 9
-    },
-    shadowRadius: 5,
-    shadowOpacity: 1
   }
 });
