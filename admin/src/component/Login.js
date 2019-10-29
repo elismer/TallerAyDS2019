@@ -8,19 +8,22 @@ class Login extends Component {
     this.state = {username: '', password: ''};
 
     this.handleChange = this.handleChange.bind(this);
-    this.Login = this.Login.bind(this);
+    this.Login = this._Login.bind(this);
   }
 
   handleChange(event) {
     this.setState({username: event.target.username, password: event.target.password});
   }
 
-  Login(){
+  _Login(){
     console.log("Entre");
-    axios.post("http/192.168.0.124/4567/login",
+    const usuario = {
+      username:this.state.username,
+      password : this.state.password
+    };
+    axios.post('http/192.168.0.124/4567/login',
       {
-        username:this.state.username,
-        password:this.state.password
+        usuario
       },
       {
         auth: {
@@ -29,7 +32,7 @@ class Login extends Component {
         }
       })
     .then (response => {
-        console.log(this.state.username);
+      console.log(this.state.username);
       console.log(response);
       console.log(this.state.username);
     });
@@ -48,7 +51,7 @@ class Login extends Component {
           Password:
           <input type="password" password={this.state.password} onChange={this.handleChange} />
         </label>
-        <button onClick= {this.Login()}> Iniciar Sesion
+        <button onClick= {this._Login}> Iniciar Sesion
         </button>
       </form>
     );
