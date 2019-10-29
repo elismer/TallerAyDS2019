@@ -12,7 +12,7 @@ export default class RecordScreen extends React.Component {
     super(props);
     const options = props.navigation.getParam("options");
     this.state = {
-      options: options,
+      options,
       tableHead: ["Pregunta", "Respuesta"],
       widthArr: [200, 200],
       questions: []

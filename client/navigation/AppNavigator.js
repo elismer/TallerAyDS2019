@@ -14,19 +14,24 @@ import AnswersScreen from "../screens/AnswersScreen";
 import CommentScreen from "../screens/CommentScreen";
 import StatScreen from "../screens/StatScreen";
 import RecordScreen from "../screens/RecordScreen";
+import ResultScreen from "../screens/ResultScreen";
 import SignUpScreen from "../screens/SignUpScreen";
 
 const AppStack = createStackNavigator({
-  Home : HomeScreen,
-  Other:OtherScreen,
+  Home: HomeScreen,
+  Other: OtherScreen,
   Settings: SettingsScreen,
   Play: PlayScreen,
+  Result: ResultScreen,
   Answers: AnswersScreen,
   Comment: CommentScreen,
   Stat: StatScreen,
-  Record: RecordScreen,
+  Record: RecordScreen
 });
-const AuthStack = createStackNavigator({ SignIn: SignInScreen, Register: SignUpScreen });
+const AuthStack = createStackNavigator({
+  SignIn: SignInScreen,
+  Register: SignUpScreen
+});
 
 export default createAppContainer(
   createSwitchNavigator(
