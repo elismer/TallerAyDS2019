@@ -2,7 +2,7 @@
 import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 import React, { Component } from 'react';
 import Home from './component/Home';
-import Login from './component/Login';
+import SignIn from './component/SignIn';
 import Menu from './component/Menu';
 import './App.css';
 
@@ -19,8 +19,8 @@ class App extends Component {
               path="/home"
               component={Home} />
             <Route
-              path="/login"
-              component={Login} />
+              path="/SignIn"
+              component={SignIn} />
             <Route
               path="/menu"
               component={Menu} />

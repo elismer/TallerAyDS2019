@@ -40,13 +40,39 @@ public class App {
       if (Base.hasConnection())
         Base.close();
       Base.open();
-      String headerToken = (String) request.headers("Authorization");
-      System.out.println("headerToken: " + headerToken);
-      if (headerToken == null || headerToken.isEmpty() || !BasicAuth.authorize(headerToken)) {
-        halt(401);
-      }
+      String name = "/login";
+      if (!(name.equals(request.pathInfo()))){
+         String headerToken = (String) request.headers("Authorization");
+         if (
+           headerToken == null ||
+           headerToken.isEmpty() ||
+           !BasicAuth.authorize(headerToken)
+         )
+         System.out.println("falle");
+           halt(401);
+         }
 
-      currentUser = BasicAuth.getUser(headerToken);
+         currentUser = BasicAuth.getUser(headerToken);
+
+      }
+    /*  String headerToken = (String) request.headers("Authorization");
+      System.out.println ("$$$$$ Method: " +request.requestMethod());
+      System.out.println("headerToken: " + headerToken);
+
+      if (request.requestMethod() != "OPTIONS"){
+           System.out.println ("NO OPTIONS ");
+
+           if (
+             headerToken == null ||
+             headerToken.isEmpty() ||
+             !BasicAuth.authorize(headerToken)
+           )
+           System.out.println("falle");
+             halt(401);
+           }
+
+           currentUser = BasicAuth.getUser(headerToken);
+     }*/
     });
 
     after((request, response) -> {
@@ -61,9 +87,27 @@ public class App {
       return "OK";
     });
 
+
+    post ("/loginAdmin", (req,res) -> {
+      Map<String,Object> bodyParams = new Gson().fromJson(req,body(), Map.class);
+      res.type("application/json");
+      System.out.println("mirando" + bodyParams.size());
+      System.out.println("intentando");
+      System.out.println("username: " +bodyParams.get("username"));
+      String str = new String(boyParams.get("username" +)":"+bodyParams.get("password"));
+      byte[] bytesEncoded = Base64.getEncoder().encode(str.getBytes());
+      String aux = new String(bytesEncoded);
+      System.out.println("aqui" + aux);
+      String ahorasi = new String ("Basic ".concat(aux));
+      currentUser = BasicAuth.getUser(ahorasi);
+      String var = "{\"Authorization\":""+ahorasi+"\",\"data"\":"+currentUser.toJson(true)+"}";
+      System.out.println("to?" +var);
+      return var;
+    });
+    
     post("/login", (req, res) -> {
       res.type("application/json");
-
+      System.out.println("si wey");
       // if there is currentUser is because headers are correct, so we only
       // return the current user here
       return currentUser.toJson(true);
