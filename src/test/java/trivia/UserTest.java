@@ -34,31 +34,31 @@ public class UserTest {
     User u = new User();
     assertEquals("username can't be blank", u.isValid(), false);
   }
-  
+
   @Test
   public void validatePresenceOfDni() {
     User u = new User();
     assertEquals("dni can't be blank", u.isValid(), false);
   }
-  
+
   @Test
   public void validatePresenceOfPassword() {
     User u = new User();
     assertEquals("password can't be blank", u.isValid(), false);
   }
-  
+
   @Test
   public void validatePresenceOfLastNameUser() {
     User u = new User();
     assertEquals("user last name can't be blank", u.isValid(), false);
   }
-  
+
   /*@Test
   public void validateNotEqualDni() {
   	User u= new User();
   	assertEquals("this dni is already loaded", u.checkDni(), true); /*checkDni sera un metodo que se fije si un dni ingresado ya se encuentra en la base de datos*/
-  
-  
- 
-  
+
+
+
+
 }

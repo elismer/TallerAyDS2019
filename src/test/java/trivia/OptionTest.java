@@ -13,7 +13,6 @@ public class OptionTest {
   @Before
   public void before(){
       Base.open("com.mysql.jdbc.Driver", "jdbc:mysql://localhost:3306/trivia_test", "root", "root");
-      System.out.println("OptionTest setup");
       Base.openTransaction();
   }
 
@@ -23,7 +22,7 @@ public class OptionTest {
       Base.rollbackTransaction();
       Base.close();
   }
-  
+
   @Test
   public void validatePresenceOfDescription() {
     Option o = new Option();

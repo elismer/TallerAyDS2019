@@ -6,10 +6,12 @@ import static spark.Spark.post;
 import static spark.Spark.halt;
 import static spark.Spark.before;
 import static spark.Spark.after;
+import static spark.Spark.put;
 import static spark.Spark.options;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Base64;
 
 import org.javalite.activejdbc.LazyList;
 
@@ -35,18 +37,76 @@ public class App {
   static User currentUser;
 
   public static void main(String[] args) {
-
     before((request, response) -> {
+  if(!Base.hasConnection()){
+    Base.open();
+  }
+  if (request.requestMethod() != "OPTIONS"){
+      System.out.println(request.headers());
+      System.out.println("autorizado?"+request.headers("Authorization"));
+      String headerToken = (String) request.headers("Authorization");
+      if (headerToken == null || headerToken.isEmpty() || !BasicAuth.authorize(headerToken)){
+        halt(401);
+      }
+      currentUser = BasicAuth.getUser(headerToken);
+  }
+
+});
+
+//Lo que se ejecuta despues de todo
+after((request, response) -> {
+  if (Base.hasConnection()) {
+    Base.close();
+  }
+  response.header("Access-Control-Allow-Origin", "*");
+      response.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
+      response.header("Access-Control-Allow-Headers","Content-Type,Authorization,X-Requested-With,Content-Length,Accept,Origin");
+
+});
+
+options("/*",
+(req, response) -> {
+  return "OK";
+}
+);
+
+  /*  before((request, response) -> {
       if (Base.hasConnection())
         Base.close();
       Base.open();
-      String headerToken = (String) request.headers("Authorization");
-      System.out.println("headerToken: " + headerToken);
-      if (headerToken == null || headerToken.isEmpty() || !BasicAuth.authorize(headerToken)) {
-        halt(401);
-      }
+      String name = "/login";
+      if (!(name.equals(request.pathInfo()))){
+         String headerToken = (String) request.headers("Authorization");
+         if (
+           headerToken == null ||
+           headerToken.isEmpty() ||
+           !BasicAuth.authorize(headerToken)
+         )
+         System.out.println("falle");
+           halt(401);
+         }
 
-      currentUser = BasicAuth.getUser(headerToken);
+         currentUser = BasicAuth.getUser(headerToken);
+
+      }
+    /*  String headerToken = (String) request.headers("Authorization");
+      System.out.println ("$$$$$ Method: " +request.requestMethod());
+      System.out.println("headerToken: " + headerToken);
+
+      if (request.requestMethod() != "OPTIONS"){
+           System.out.println ("NO OPTIONS ");
+
+           if (
+             headerToken == null ||
+             headerToken.isEmpty() ||
+             !BasicAuth.authorize(headerToken)
+           )
+           System.out.println("falle");
+             halt(401);
+           }
+
+           currentUser = BasicAuth.getUser(headerToken);
+     }
     });
 
     after((request, response) -> {
@@ -60,10 +120,21 @@ public class App {
     options("/*", (request, response) -> {
       return "OK";
     });
+*/
+
+    post("/loginAdmin", (req,res) -> {
+         if(!currentUser.getBoolean("admin")){
+                 System.out.println("NOOOOOOO");
+         currentUser=null;
+         halt(401);
+       }
+       System.out.println("SIIIIIIIII");
+       return currentUser.toJson(true);
+    });
 
     post("/login", (req, res) -> {
       res.type("application/json");
-
+      System.out.println("si wey");
       // if there is currentUser is because headers are correct, so we only
       // return the current user here
       return currentUser.toJson(true);
