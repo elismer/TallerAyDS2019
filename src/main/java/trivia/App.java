@@ -6,10 +6,12 @@ import static spark.Spark.post;
 import static spark.Spark.halt;
 import static spark.Spark.before;
 import static spark.Spark.after;
+import static spark.Spark.put;
 import static spark.Spark.options;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Base64;
 
 import org.javalite.activejdbc.LazyList;
 
@@ -35,8 +37,40 @@ public class App {
   static User currentUser;
 
   public static void main(String[] args) {
-
     before((request, response) -> {
+  if(!Base.hasConnection()){
+    Base.open();
+  }
+  if (request.requestMethod() != "OPTIONS"){
+      System.out.println(request.headers());
+      System.out.println("autorizado?"+request.headers("Authorization"));
+      String headerToken = (String) request.headers("Authorization");
+      if (headerToken == null || headerToken.isEmpty() || !BasicAuth.authorize(headerToken)){
+        halt(401);
+      }
+      currentUser = BasicAuth.getUser(headerToken);
+  }
+
+});
+
+//Lo que se ejecuta despues de todo
+after((request, response) -> {
+  if (Base.hasConnection()) {
+    Base.close();
+  }
+  response.header("Access-Control-Allow-Origin", "*");
+      response.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
+      response.header("Access-Control-Allow-Headers","Content-Type,Authorization,X-Requested-With,Content-Length,Accept,Origin");
+
+});
+
+options("/*",
+(req, response) -> {
+  return "OK";
+}
+);
+
+  /*  before((request, response) -> {
       if (Base.hasConnection())
         Base.close();
       Base.open();
@@ -72,7 +106,7 @@ public class App {
            }
 
            currentUser = BasicAuth.getUser(headerToken);
-     }*/
+     }
     });
 
     after((request, response) -> {
@@ -86,25 +120,18 @@ public class App {
     options("/*", (request, response) -> {
       return "OK";
     });
+*/
 
-
-    post ("/loginAdmin", (req,res) -> {
-      Map<String,Object> bodyParams = new Gson().fromJson(req,body(), Map.class);
-      res.type("application/json");
-      System.out.println("mirando" + bodyParams.size());
-      System.out.println("intentando");
-      System.out.println("username: " +bodyParams.get("username"));
-      String str = new String(boyParams.get("username" +)":"+bodyParams.get("password"));
-      byte[] bytesEncoded = Base64.getEncoder().encode(str.getBytes());
-      String aux = new String(bytesEncoded);
-      System.out.println("aqui" + aux);
-      String ahorasi = new String ("Basic ".concat(aux));
-      currentUser = BasicAuth.getUser(ahorasi);
-      String var = "{\"Authorization\":""+ahorasi+"\",\"data"\":"+currentUser.toJson(true)+"}";
-      System.out.println("to?" +var);
-      return var;
+    post("/loginAdmin", (req,res) -> {
+         if(!currentUser.getBoolean("admin")){
+                 System.out.println("NOOOOOOO");
+         currentUser=null;
+         halt(401);
+       }
+       System.out.println("SIIIIIIIII");
+       return currentUser.toJson(true);
     });
-    
+
     post("/login", (req, res) -> {
       res.type("application/json");
       System.out.println("si wey");
