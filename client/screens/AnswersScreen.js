@@ -27,13 +27,14 @@ export default class AnswersScreen extends React.Component {
 
     this.state = {
       question: question,
-      options: []
+      options: [],
+      optionCorrect: null,
     };
     this.loadOptions(question.id);
   }
 
   render() {
-    const { question, options } = this.state;
+    const { question, options, optionCorrect } = this.state;
     let optionsShuffle = shuffle(options);
     return (
       <View style={styles.container}>
@@ -59,7 +60,12 @@ export default class AnswersScreen extends React.Component {
   loadOptions = question_id => {
     axios.get("/options/" + question_id).then(response => {
       let options = response.data;
-      this.setState({ options });
+      options.map(option => {
+        if (option.type == "CORRECT"){
+          let optionCorrect = option;
+          this.setState({options, optionCorrect});
+        }
+      });
     });
   };
 
