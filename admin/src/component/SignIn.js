@@ -1,5 +1,6 @@
 import React,{Component} from "react";
 import { AsyncStorage } from 'AsyncStorage';
+import '../styles/signInStyle.css';
 
 class SignIn extends Component{
     constructor(props) {
@@ -51,13 +52,13 @@ class SignIn extends Component{
           <div className="login-page">
             <div className="form">
               <form className="login-form" >
-                <label>
+                <label class = "l1">
                   <input type="text" placeholder="Nombre de usuario" name="username" value={this.state.username} onChange={this.handleChange} />
                 </label>
-                <label>
+                <label class = "l1">
                   <input type="password" placeholder="Contraseña" name="password" value={this.state.password} onChange={this.handleChange} />
                 </label>
-                <p className="message">No tiene una cuenta? <a href="signUp">Crear cuenta</a></p>
+                <p className="message">¿No tiene una cuenta? <a href="signUp"> Crear cuenta</a></p>
               </form>
               <button onClick ={this.login}>
                 iniciar sesion
