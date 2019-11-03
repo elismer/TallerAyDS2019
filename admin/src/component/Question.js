@@ -6,7 +6,7 @@ import Dropdown from 'react-bootstrap/Dropdown';
 class Question extends Component{
   constructor(props) {
       super(props);
-      this.state = {description: '',option1: '',option2:'',option3:'',optionUnknow:'UNKNOW',optionCorrect:''};
+      this.state = {cats:[], category:false, id_category:'',description: '',option1: '',option2:'',option3:'',optionUnknow:'UNKNOW',optionCorrect:''};
       this.handleChange = this.handleChange.bind(this);
   }
 
@@ -21,15 +21,38 @@ class Question extends Component{
     this.setState(change)
   }
 
+
+  searchCategory= async() => {
+    const h = new Headers();
+    console.log(await AsyncStorage.getItem('userToken'));
+    h.append('Content-Type','application/json; charset=UTF-8');
+    h.append('Authorization', await AsyncStorage.getItem('userToken'));
+    await fetch(process.env.REACT_APP_API_HOST+"/categories",{
+       method: 'GET',
+       headers: h
+    }).then(response => response.json())
+      .then(response => {
+        console.log(response);
+        let cats = [];
+
+      Object.values(response).forEach(item => {
+          cats = cats.concat(item);
+      });
+        this.setState({cats:cats});
+      })
+      .catch (error => {
+        console.log(error);
+      });
+}
+
   loadQuestion= async() => {
       const h = new Headers();
-      console.log("aqui");
       console.log(await AsyncStorage.getItem('userToken'));
       h.append('Content-Type','application/json; charset=UTF-8');
       h.append('Authorization', await AsyncStorage.getItem('userToken'));
       await fetch(process.env.REACT_APP_API_HOST+"/questions",{
          method: 'POST',
-         body: JSON.stringify({description: this.state.description, category_id: 1, options: [
+         body: JSON.stringify({description: this.state.description, category_id: this.state.id_category, options: [
            {description: this.state.option1, type: 'INCORRECT'},
            {description: this.state.option2, type: 'INCORRECT'},
            {description: this.state.option3, type: 'INCORRECT'},
@@ -50,7 +73,7 @@ class Question extends Component{
   }
 
   form(){
-      if(this.state.category!= '' ){
+      if(this.state.category){
            return(
              <div className="form">
                  <form className="question-form" >
@@ -76,22 +99,36 @@ class Question extends Component{
              </div>
             );
       }
+      else{
+        return(
+        <div>
+                <DropdownButton id="dropdown-item-button" title="CATEGORIAS" onClick={this.searchCategory}>
+                {this.state.cats.map(cats =>
+                  <li key={cats.id}>
+                      <Dropdown.Item as="button" onClick={()=> this.setState({id_category:cats.id,category: true})}> soy {cats.category_name}</Dropdown.Item>
+                  </li>
+                  )}
+                </DropdownButton>
+            </div>
+        );
+      }
+
   }
+
+
+
+
 
 
   render () {
     return (
+      <div>
+          <div className="question-page">
 
-    <div className="question-page">
-       <DropdownButton id="dropdown-basic-button" title="CATEGORIAS">
-         <Dropdown.Item href="#/action-1">EXAMEN CLINICO</Dropdown.Item>
-         <Dropdown.Item href="#/action-2">FARMACOLOGIA Y TERAPEUTICA</Dropdown.Item>
-         <Dropdown.Item href="#/action-3">ENFERMEDADES INFECCIOSAS Y PARASITARIAS</Dropdown.Item>
-         <Dropdown.Item href="#/action-1">CLINICA MEDICA</Dropdown.Item>
-         <Dropdown.Item href="#/action-1">CLINICA QUIRURGICA</Dropdown.Item>
-         <Dropdown.Item href="#/action-1">MANEJO POBLACIONAL</Dropdown.Item>
-       </DropdownButton>
-       {this.form()}
+           <div>
+             {this.form()}
+           </div>
+           </div>
     </div>
     );
   }
