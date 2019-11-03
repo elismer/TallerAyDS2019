@@ -20,6 +20,9 @@ CREATE TABLE if not exists users (
 CREATE TABLE if not exists categories (
   id int(11) NOT NULL auto_increment PRIMARY KEY,
   num_category ENUM ('1','2','3','4','5','6') NOT NULL,
+  cat_corrects int,
+  cat_incorrects int,
+  cat_unknow int,
   category_name VARCHAR(50),
   created_at DATETIME,
   updated_at DATETIME

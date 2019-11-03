@@ -279,17 +279,22 @@ after((request, response) -> {
       LazyList<Game> games = currentUser.getAll(Game.class);
       Game game = games.get(0);
       Option option = Option.findById(bodyParams.get("chosen_option"));
+      Question q = Question.findById(option.getInteger("question_id"));
+      Category c = Category.findById(q.getInteger("category_id"));
       game.add(option);
       int cant = 0;
       if (option.get("type").equals("CORRECT")) {
+        c.set("cat_correct", c.getInteger("cat_correct")+1);
         cant = (int) stat.get("cant_correct_questions") + 1;
         stat.set("cant_correct_questions", cant);
         System.out.println("Tu respuesta es correcta");
       } else if (option.get("type").equals("INCORRECT")) {
+        c.set("cat_incorrect", c.getInteger("cat_incorrect")+1);
         cant = (int) stat.get("cant_incorrect_questions") + 1;
         stat.set("cant_incorrect_questions", cant);
         System.out.println("Respuesta incorrecta");
       } else {
+        c.set("cat_unknow", c.getInteger("cat_unknow")+1);
         cant = (int) stat.get("cant_unknown_questions") + 1;
         stat.set("cant_unknown_questions", cant);
       }
