@@ -7,9 +7,9 @@ class Home extends Component {
   render () {
     return (
       <div>
-        <h1> ¡Bienvenido a Trivia Vet! </h1>
-        <h1> Iniciar Sesion </h1>
-        <p class="p1"><Link to="/SignIn" className="link">Iniciar Sesion</Link></p>
+        <h1 class="home"> ¡Bienvenido a Trivia Vet! </h1>
+        <h1 class="home"> Iniciar Sesion </h1>
+        <p class="pHome"><Link to="/SignIn" className="link">Iniciar Sesion</Link></p>
       </div>
     );
   }

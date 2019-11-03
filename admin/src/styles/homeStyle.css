@@ -1,16 +1,16 @@
-body {
+body{
   text-align: center;
   background-image: url('perroPaisaje.jpeg');
   background-size: cover;
 }
 
-h1 {
+h1.home {
   color: black;
   font-size: 40px;
   font-family: Arial-black;
   text-align: center;
 }
 
-p.p1 {
+p.pHome {
   font-size: 20px;
 }

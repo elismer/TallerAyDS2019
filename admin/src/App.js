@@ -6,9 +6,9 @@ import SignIn from './component/SignIn';
 import Menu from './component/Menu';
 import Question from './component/Question';
 import Stats from './component/Stats';
-import './App.css';
 
 class App extends Component {
+
   render() {
     return (
       <BrowserRouter>

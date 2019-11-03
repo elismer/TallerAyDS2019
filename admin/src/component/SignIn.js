@@ -49,21 +49,22 @@ class SignIn extends Component{
   render () {
         return (
 
-          <div className="login-page">
-            <div className="form">
-              <form className="login-form" >
-                <label class = "l1">
-                  <input type="text" placeholder="Nombre de usuario" name="username" value={this.state.username} onChange={this.handleChange} />
-                </label>
-                <label class = "l1">
-                  <input type="password" placeholder="Contraseña" name="password" value={this.state.password} onChange={this.handleChange} />
-                </label>
-              </form>
-              <button onClick ={this.login}>
-                Iniciar sesion
-                </button>
+            <div className="login-page">
+              <div className="form">
+                <form className="login-form" >
+                  <label class="sign-in">
+                    <p> <input type="text" placeholder="Nombre de usuario" name="username" class="sign-in1" value={this.state.username} onChange={this.handleChange} /> </p>
+                  </label>
+                  <label>
+                    <p> <input type="password" placeholder="Contraseña" name="password" class="sign-in2" value={this.state.password} onChange={this.handleChange} /> </p>
+                  </label>
+                </form>
+              <button class="sign-in" onClick ={this.login}>
+                  Iniciar sesion
+              </button>
+              </div>
             </div>
-          </div>
+          
         );
   }
 }

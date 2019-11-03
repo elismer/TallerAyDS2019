@@ -1,4 +1,5 @@
 import React,{Component} from "react";
+import '../styles/menuStyle.css';
 
 class Menu extends Component{
 
@@ -12,11 +13,15 @@ seeStats = () => {
 
   render () {
     return (
-      <div className="menu-page">
-        <h1> MENU </h1>
-        <button onClick ={this.newQuestion}> CARGAR PREGUNTAS </button>
-        <button onClick ={this.seeStats}> VER ESTADISTICAS </button>
-      </div>
+
+
+        <div className="menu-page">
+          <h1 class="menu"> MENU </h1>
+            <p> <button class="menu" onClick ={this.newQuestion}> CARGAR PREGUNTAS </button> </p>
+            <p> <button class="menu" onClick ={this.seeStats}> VER ESTADISTICAS </button> </p>
+        </div>
+  
+
     );
   }
 }

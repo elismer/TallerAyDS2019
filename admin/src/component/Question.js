@@ -2,6 +2,7 @@ import React,{Component} from "react";
 import { AsyncStorage } from "AsyncStorage";
 import DropdownButton from "react-bootstrap/DropdownButton";
 import Dropdown from 'react-bootstrap/Dropdown';
+import '../styles/questionStyle.css';
 
 class Question extends Component{
   constructor(props) {
@@ -78,19 +79,19 @@ class Question extends Component{
              <div className="form">
                  <form className="question-form" >
                    <label>
-                     <input type="text" placeholder="PREGUNTA" name="description" value={this.state.description} onChange={this.handleChange} />
+                    <p> <input type="text" placeholder="PREGUNTA" name="description" class="question" value={this.state.description} onChange={this.handleChange} /> </p>
                    </label>
                    <label>
-                     <input type="text" placeholder="OPCION 1" name="option1" value={this.state.option1} onChange={this.handleChange} />
+                    <p> <input type="text" placeholder="OPCION 1" name="option1" class="question" value={this.state.option1} onChange={this.handleChange} /> </p>
                    </label>
                    <label>
-                     <input type="text" placeholder="OPCION 2" name="option2" value={this.state.option2} onChange={this.handleChange} />
+                     <p> <input type="text" placeholder="OPCION 2" name="option2" class="question" value={this.state.option2} onChange={this.handleChange} /> </p>
                    </label>
                    <label>
-                     <input type="text" placeholder="OPCION 3" name="option3" value={this.state.option3} onChange={this.handleChange} />
+                     <p> <input type="text" placeholder="OPCION 3" name="option3" class="question" value={this.state.option3} onChange={this.handleChange} /> </p>
                    </label>
                    <label>
-                     <input type="text" placeholder="OPCION CORRECTA" name="optionCorrect" value={this.state.optionCorrect} onChange={this.handleChange} />
+                    <p>  <input type="text" placeholder="OPCION CORRECTA" name="optionCorrect" class="question" value={this.state.optionCorrect} onChange={this.handleChange} /> </p>
                    </label>
                  </form>
                  <button onClick ={this.loadQuestion}>
@@ -101,7 +102,7 @@ class Question extends Component{
       }
       else{
         return(
-        <div>
+          <div>
                 <DropdownButton id="dropdown-item-button" title="CATEGORIAS" onClick={this.searchCategory}>
                 {this.state.cats.map(cats =>
                   <li key={cats.id}>
@@ -109,7 +110,7 @@ class Question extends Component{
                   </li>
                   )}
                 </DropdownButton>
-            </div>
+          </div>
         );
       }
 
@@ -122,14 +123,16 @@ class Question extends Component{
 
   render () {
     return (
-      <div>
+      <h2 class="question">
+        <div>
           <div className="question-page">
-
-           <div>
+            <div>
              {this.form()}
-           </div>
-           </div>
-    </div>
+            </div>
+          </div>
+        </div>
+      </h2>
+
     );
   }
 }
