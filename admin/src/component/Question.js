@@ -106,7 +106,7 @@ class Question extends Component{
                 <DropdownButton id="dropdown-item-button" title="CATEGORIAS" onClick={this.searchCategory}>
                 {this.state.cats.map(cats =>
                   <li key={cats.id}>
-                      <Dropdown.Item as="button" onClick={()=> this.setState({id_category:cats.id,category: true})}> soy {cats.category_name}</Dropdown.Item>
+                      <Dropdown.Item as="button" onClick={()=> this.setState({id_category:cats.id,category: true})}> {cats.category_name}</Dropdown.Item>
                   </li>
                   )}
                 </DropdownButton>
