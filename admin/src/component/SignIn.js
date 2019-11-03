@@ -41,7 +41,7 @@ class SignIn extends Component{
               this.props.history.push('/Menu');
             })
               .catch(error => {
-                //agregar alerta
+                alert("Usuario no autorizado");
                 console.log(error)
               });
       }
@@ -58,7 +58,6 @@ class SignIn extends Component{
                 <label class = "l1">
                   <input type="password" placeholder="Contraseña" name="password" value={this.state.password} onChange={this.handleChange} />
                 </label>
-                <p className="message">¿No tiene una cuenta? <a href="signUp"> Crear cuenta</a></p>
               </form>
               <button onClick ={this.login}>
                 iniciar sesion

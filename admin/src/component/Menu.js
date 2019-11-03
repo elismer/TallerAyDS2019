@@ -6,6 +6,10 @@ newQuestion = () => {
   this.props.history.push("/Question");
 }
 
+seeStats = () => {
+  this.props.history.push("/Stats");
+}
+
   render () {
     return (
       <div className="menu-page">
