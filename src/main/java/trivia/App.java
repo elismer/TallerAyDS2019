@@ -219,10 +219,17 @@ after((request, response) -> {
     // get para obtener las categorias
     get("/categories", (req, res) -> {
       LazyList<Category> cat = Category.findAll();
+      String aux="{";
+      int i=1;
       for (Category category : cat) {
-        System.out.println(category);
+        aux=aux+"\"cat"+i+"\":"+category.toJson(true);
+        if(i!=cat.size()){
+          aux=aux+",";
+        }
+        i++;
       }
-      return cat;
+              aux=aux+"}";
+      return aux;
     });
 
     get("/stats", (req, res) -> {
@@ -232,6 +239,19 @@ after((request, response) -> {
       res.type("application/json");
 
       return stat.toJson(true);
+    });
+
+    get("/stats/:dni", (req, res) -> {
+      User user= User.findFirst("dni=?", req.params(":dni"));
+      if (!(user == null)){
+          LazyList<Stat> stats = user.getAll(Stat.class);
+          Stat stat = stats.get(0);
+          res.type("application/json");
+          return stat.toJson(true);
+      }
+      else {
+        return "{}";
+      }
     });
 
     get("/record/:type", (req, res) -> {

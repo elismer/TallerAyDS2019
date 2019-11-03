@@ -60,7 +60,7 @@ class SignIn extends Component{
                 </label>
               </form>
               <button onClick ={this.login}>
-                iniciar sesion
+                Iniciar sesion
                 </button>
             </div>
           </div>
