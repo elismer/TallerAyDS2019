@@ -8,7 +8,6 @@ import Question from './component/Question';
 import Stats from './component/Stats';
 
 class App extends Component {
-
   render() {
     return (
       <BrowserRouter>

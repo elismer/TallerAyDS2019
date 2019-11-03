@@ -22,10 +22,10 @@ class Stats extends Component {
        <div>
             <form className="login-form" >
               <label>
-                <input type="text" placeholder="DNI"name="dni" value={this.state.dni} onChange={this.handleChange}/>
+                <input type="text" placeholder="DNI"name="dni" class="stats" value={this.state.dni} onChange={this.handleChange}/>
               </label>
             </form>
-            <button onClick={this.statsUser}> BUSCAR !  </button>
+            <button class="stats3" onClick={this.statsUser}> BUSCAR !  </button>
        </div>
      );
      }
@@ -50,10 +50,10 @@ class Stats extends Component {
      }else if (this.state.choosenType == "statsUser"){
         return (
          <div>
-          <h1> Correctas : {this.state.user.cant_correct_questions} </h1>
-          <h1> Incorrectas: {this.state.user.cant_incorrect_questions} </h1>
-          <h1> Totales: {this.state.user.cant_total_questions} </h1>
-          <h1> Unknow: {this.state.user.cant_unknown_questions} </h1>
+          <h1 class="user-stats1"> Correctas : {this.state.user.cant_correct_questions} </h1>
+          <h1 class="user-stats"> Incorrectas: {this.state.user.cant_incorrect_questions} </h1>
+          <h1 class="user-stats"> Totales: {this.state.user.cant_total_questions} </h1>
+          <h1 class="user-stats"> Unknow: {this.state.user.cant_unknown_questions} </h1>
          </div>
         );
       }
@@ -61,12 +61,12 @@ class Stats extends Component {
     else {
       return (
         <div>
-          <button onClick ={() => this.setState({choosenType:"user" , chooseType: true})}>
+          <p> <button class="stats1" onClick ={() => this.setState({choosenType:"user" , chooseType: true})}>
             ESTADISTICAS POR USUARIO
-            </button>
-            <button onClick = {this.statsCategory} >
+          </button> </p>
+          <p> <button class="stats2" onClick = {this.statsCategory} >
             ESTADISTICAS POR CATEGORIA
-            </button>
+          </button> </p>
         </div>
       ) ;
     }
