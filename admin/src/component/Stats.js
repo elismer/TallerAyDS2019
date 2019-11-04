@@ -33,7 +33,7 @@ class Stats extends Component {
        return (
          <div>
            {this.state.cats.map(cats =>
-             <li key={cats.id}>
+             <li key={cats.id} class="stats">
                  {"\n"}
                  {cats.category_name}
                  {"\n"}

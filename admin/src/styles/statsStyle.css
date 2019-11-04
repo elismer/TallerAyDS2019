@@ -36,3 +36,8 @@ h1.user-stats{
   color: black;
   font-size: 25px;
 }
+
+li.stats{
+  margin-top: 30px;
+  font-size: 20px;
+}

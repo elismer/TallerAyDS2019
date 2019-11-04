@@ -284,17 +284,20 @@ after((request, response) -> {
       game.add(option);
       int cant = 0;
       if (option.get("type").equals("CORRECT")) {
-        c.set("cat_correct", c.getInteger("cat_correct")+1);
+        c.set("cat_corrects", c.getInteger("cat_corrects")+1);
+        c.saveIt();
         cant = (int) stat.get("cant_correct_questions") + 1;
         stat.set("cant_correct_questions", cant);
         System.out.println("Tu respuesta es correcta");
       } else if (option.get("type").equals("INCORRECT")) {
-        c.set("cat_incorrect", c.getInteger("cat_incorrect")+1);
+        c.set("cat_incorrects", c.getInteger("cat_incorrects")+1);
+        c.saveIt();
         cant = (int) stat.get("cant_incorrect_questions") + 1;
         stat.set("cant_incorrect_questions", cant);
         System.out.println("Respuesta incorrecta");
       } else {
         c.set("cat_unknow", c.getInteger("cat_unknow")+1);
+        c.saveIt();
         cant = (int) stat.get("cant_unknown_questions") + 1;
         stat.set("cant_unknown_questions", cant);
       }
