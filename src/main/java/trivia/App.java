@@ -6,10 +6,12 @@ import static spark.Spark.post;
 import static spark.Spark.halt;
 import static spark.Spark.before;
 import static spark.Spark.after;
+import static spark.Spark.put;
 import static spark.Spark.options;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Base64;
 
 import org.javalite.activejdbc.LazyList;
 
@@ -35,35 +37,50 @@ public class App {
   static User currentUser;
 
   public static void main(String[] args) {
-
     before((request, response) -> {
-      if (Base.hasConnection())
-        Base.close();
-      Base.open();
+  if(!Base.hasConnection()){
+    Base.open();
+  }
+  if (request.requestMethod() != "OPTIONS"){
+      System.out.println(request.headers());
+      System.out.println("autorizado?"+request.headers("Authorization"));
       String headerToken = (String) request.headers("Authorization");
-      System.out.println("headerToken: " + headerToken);
-      if (headerToken == null || headerToken.isEmpty() || !BasicAuth.authorize(headerToken)) {
+      if (headerToken == null || headerToken.isEmpty() || !BasicAuth.authorize(headerToken)){
         halt(401);
       }
-
       currentUser = BasicAuth.getUser(headerToken);
-    });
+  }
 
-    after((request, response) -> {
-      Base.close();
-      response.header("Access-Control-Allow-Origin", "*");
+});
+
+//Lo que se ejecuta despues de todo
+after((request, response) -> {
+  if (Base.hasConnection()) {
+    Base.close();
+  }
+  response.header("Access-Control-Allow-Origin", "*");
       response.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
-      response.header("Access-Control-Allow-Headers",
-          "Content-Type,Authorization,X-Requested-With,Content-Length,Accept,Origin,");
-    });
+      response.header("Access-Control-Allow-Headers","Content-Type,Authorization,X-Requested-With,Content-Length,Accept,Origin");
 
-    options("/*", (request, response) -> {
-      return "OK";
+});
+
+    options("/*",
+        (req, response) -> {
+          return "OK";
+        }
+    );
+
+
+    post("/loginAdmin", (req,res) -> {
+         if(!currentUser.getBoolean("admin")){
+           currentUser=null;
+           halt(401);
+         }
+         return currentUser.toJson(true);
     });
 
     post("/login", (req, res) -> {
       res.type("application/json");
-
       // if there is currentUser is because headers are correct, so we only
       // return the current user here
       return currentUser.toJson(true);
@@ -202,10 +219,17 @@ public class App {
     // get para obtener las categorias
     get("/categories", (req, res) -> {
       LazyList<Category> cat = Category.findAll();
+      String aux="{";
+      int i=1;
       for (Category category : cat) {
-        System.out.println(category);
+        aux=aux+"\"cat"+i+"\":"+category.toJson(true);
+        if(i!=cat.size()){
+          aux=aux+",";
+        }
+        i++;
       }
-      return cat;
+              aux=aux+"}";
+      return aux;
     });
 
     get("/stats", (req, res) -> {
@@ -215,6 +239,19 @@ public class App {
       res.type("application/json");
 
       return stat.toJson(true);
+    });
+
+    get("/stats/:dni", (req, res) -> {
+      User user= User.findFirst("dni=?", req.params(":dni"));
+      if (!(user == null)){
+          LazyList<Stat> stats = user.getAll(Stat.class);
+          Stat stat = stats.get(0);
+          res.type("application/json");
+          return stat.toJson(true);
+      }
+      else {
+        return "{}";
+      }
     });
 
     get("/record/:type", (req, res) -> {
@@ -242,17 +279,25 @@ public class App {
       LazyList<Game> games = currentUser.getAll(Game.class);
       Game game = games.get(0);
       Option option = Option.findById(bodyParams.get("chosen_option"));
+      Question q = Question.findById(option.getInteger("question_id"));
+      Category c = Category.findById(q.getInteger("category_id"));
       game.add(option);
       int cant = 0;
       if (option.get("type").equals("CORRECT")) {
+        c.set("cat_corrects", c.getInteger("cat_corrects")+1);
+        c.saveIt();
         cant = (int) stat.get("cant_correct_questions") + 1;
         stat.set("cant_correct_questions", cant);
         System.out.println("Tu respuesta es correcta");
       } else if (option.get("type").equals("INCORRECT")) {
+        c.set("cat_incorrects", c.getInteger("cat_incorrects")+1);
+        c.saveIt();
         cant = (int) stat.get("cant_incorrect_questions") + 1;
         stat.set("cant_incorrect_questions", cant);
         System.out.println("Respuesta incorrecta");
       } else {
+        c.set("cat_unknow", c.getInteger("cat_unknow")+1);
+        c.saveIt();
         cant = (int) stat.get("cant_unknown_questions") + 1;
         stat.set("cant_unknown_questions", cant);
       }
