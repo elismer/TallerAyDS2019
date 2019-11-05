@@ -1,0 +1,43 @@
+body{
+  text-align: center;
+  background-image: url('perroPaisaje.jpeg');
+  background-size: cover;
+}
+
+button.stats1{
+  font-size: 20px;
+  margin-top: 100px;
+}
+
+
+button.stats2{
+  font-size: 20px;
+}
+
+input.stats{
+  margin-top: 100px;
+  font-size: 25px;
+}
+
+button.stats3{
+  margin-top: 20px;
+  font-size: 20px;
+}
+
+h1.user-stats1{
+  margin-top: 40px;
+  background-color: white;
+  color: black;
+  font-size: 25px;
+}
+
+h1.user-stats{
+  background-color: white;
+  color: black;
+  font-size: 25px;
+}
+
+li.stats{
+  margin-top: 30px;
+  font-size: 20px;
+}

@@ -1,0 +1,19 @@
+body{
+  text-align: center;
+  background-image: url('perroPaisaje.jpeg');
+  background-size: cover;
+}
+
+button.sign-in {
+  margin-top: 10px;
+  font-size: 25px;
+}
+
+input.sign-in1{
+  margin-top: 40px;
+  font-size: 25px;
+}
+
+input.sign-in2{
+  font-size: 25px;
+}

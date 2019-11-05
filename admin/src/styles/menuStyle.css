@@ -1,0 +1,14 @@
+body{
+  text-align: center;
+  background-image: url('perroPaisaje.jpeg');
+  background-size: cover;
+}
+
+button.menu{
+  font-size: 20px;
+}
+
+h1.menu{
+  text-decoration: underline;
+  font-size: 80px;
+}

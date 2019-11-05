@@ -1,0 +1,17 @@
+body{
+  text-align: center;
+  background-image: url('perroPaisaje.jpeg');
+  background-size: cover;
+}
+
+h2.question{
+
+}
+
+input.question{
+  font-size: 25px;
+}
+
+div.question{
+  font-size: 40px;
+}

@@ -1,11 +1,8 @@
 use trivia_dev;
 
 -- CREATE ADMIN USER
-INSERT INTO users (id, username, password, admin)
-SELECT * FROM (SELECT 1, 'aturing', 'turing', true) AS tmp
-WHERE NOT EXISTS (
-    SELECT username FROM users WHERE username = 'aturing'
-) LIMIT 1;
+INSERT INTO users (id, first_name,last_name, dni, username, password, admin)
+VALUES( 1, 'aturing', 'turing', 123, 'adminn','admin', true) ;
 
 
 -- CREATE QUESTIONS

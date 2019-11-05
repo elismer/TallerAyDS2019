@@ -1,14 +1,9 @@
 -- create categories
 use trivia_dev;
-INSERT INTO trivia_dev.categories (num_category) VALUES ('1');
-INSERT INTO trivia_dev.categories (num_category) VALUES ('2');
-INSERT INTO trivia_dev.categories (num_category) VALUES ('3');
-INSERT INTO trivia_dev.categories (num_category) VALUES ('4');
-INSERT INTO trivia_dev.categories (num_category) VALUES ('5');
-INSERT INTO trivia_dev.categories (num_category) VALUES ('6');
+INSERT INTO trivia_dev.categories (num_category,category_name,cat_corrects,cat_incorrects,cat_unknow) VALUES ('1','EXAMEN CLINICO',0,0,0);
+INSERT INTO trivia_dev.categories (num_category,category_name,cat_corrects,cat_incorrects,cat_unknow) VALUES ('2','FARMACOLOGIA Y TERAPEUTICA',0,0,0);
+INSERT INTO trivia_dev.categories (num_category,category_name,cat_corrects,cat_incorrects,cat_unknow) VALUES ('3','ENFERMEDADES INFECCIOSAS Y PARASITARIAS',0,0,0);
+INSERT INTO trivia_dev.categories (num_category,category_name,cat_corrects,cat_incorrects,cat_unknow) VALUES ('4','CLINICA MEDICA',0,0,0);
+INSERT INTO trivia_dev.categories (num_category,category_name,cat_corrects,cat_incorrects,cat_unknow) VALUES ('5','CLINICA QUIRURGICA',0,0,0);
+INSERT INTO trivia_dev.categories (num_category,category_name,cat_corrects,cat_incorrects,cat_unknow) VALUES ('6','MANEJO POBLACIONAL',0,0,0);
 
-SELECT * FROM trivia_dev.games;
-SELECT * FROM trivia_dev.users;
-SELECT * FROM trivia_dev.questions;
-SELECT * FROM trivia_dev.options;
-SELECT * FROM trivia_dev.answers;
